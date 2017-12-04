@@ -2,20 +2,6 @@ group 'com.epam.adok.spring'
 version '1.0-SNAPSHOT'
 
 apply plugin: 'war'
-apply from: 'https://raw.githubusercontent.com/newnewcoder/jboss-curl-deploy-gradle-plugin/master/pluginScripts/jbossCurlDeploy.plugin'
-
-jboss {
-    host = 'localhost'
-    port = '9990'
-    user = 'Adilkhan'
-    password = 'adilkhan'
-    warName = 'blog-web-1.0-SNAPSHOT.war'
-    warPath = './blog-web/build/libs/'
-    debug = false
-
-    // gradle deploy - add war to JBoss EAP server and enable application.
-    // gradle remove - remove application from JBoss EAP server.
-}
 
 dependencies {
     compile project(":blog-core")
