@@ -14,4 +14,10 @@ subprojects {
     repositories {
         mavenCentral()
     }
+
+    dependencies {
+        compile 'org.springframework:spring-core:5.0.2.RELEASE'
+        compile 'org.springframework:spring-orm:5.0.2.RELEASE'
+        compile 'org.springframework:spring-web:5.0.2.RELEASE'
+    }
 }
