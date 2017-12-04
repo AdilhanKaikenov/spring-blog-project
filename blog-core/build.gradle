@@ -1,5 +1,47 @@
 group 'com.epam.adok.spring'
 version '1.0-SNAPSHOT'
 
+sourceSets {
+    generated {
+        java {
+            srcDirs = ['src/querydsl-jpa-generated-types']
+        }
+    }
+}
+
+configurations {
+    querydslapt
+}
+
 dependencies {
+    compile 'javax:javaee-web-api:7.0'
+    compile 'javax:javaee-api:7.0'
+    compile "com.mysema.querydsl:querydsl-jpa:3.7.4"
+    compile "com.mysema.querydsl:querydsl-core:3.7.4"
+    compile "com.mysema.querydsl:querydsl-apt:3.7.4"
+}
+
+task generateQueryDSL(type: JavaCompile, group: 'build', description: 'Generates the QueryDSL query types') {
+    source = sourceSets.main.java
+    classpath = configurations.compile + configurations.querydslapt
+    options.compilerArgs = [
+            "-proc:only",
+            "-processor", "com.mysema.query.apt.jpa.JPAAnnotationProcessor"
+    ]
+    destinationDir = sourceSets.generated.java.srcDirs.iterator().next()
+}
+
+compileJava {
+    dependsOn generateQueryDSL
+    source generateQueryDSL.destinationDir
+}
+
+compileGeneratedJava {
+    dependsOn generateQueryDSL
+    options.warnings = false
+    classpath += sourceSets.main.runtimeClasspath
+}
+
+clean {
+    delete sourceSets.generated.java.srcDirs
 }
