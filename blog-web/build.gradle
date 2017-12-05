@@ -5,4 +5,6 @@ apply plugin: 'war'
 
 dependencies {
     compile project(":blog-core")
+    compile 'javax.servlet:javax.servlet-api:4.0.0'
+    compile 'jstl:jstl:1.2'
 }
