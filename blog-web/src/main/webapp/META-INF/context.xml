@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Context>
+
+    <Resource auth="Container"
+              driverClassName="com.mysql.jdbc.Driver"
+              maxTotal="8"
+              maxAge="0"
+              maxIdle="3"
+              name="java:/MySqlDS"
+              username="root"
+              password="admin"
+              type="javax.sql.DataSource"
+              url="jdbc:mysql://localhost:3306/blog_db"/>
+
+
+</Context>
