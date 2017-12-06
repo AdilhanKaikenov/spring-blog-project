@@ -4,11 +4,16 @@ INSERT INTO user(id, login, password, email, date_of_registration) VALUES (2, 'U
 INSERT INTO unique_id(id) VALUES (1);
 INSERT INTO unique_id(id) VALUES (2);
 INSERT INTO unique_id(id) VALUES (3);
+INSERT INTO unique_id(id) VALUES (4);
 
 INSERT INTO blog (id, title, content, user_id, publication_date)
 VALUES (1, 'Blog#1', 'Content Text', 1, '2017-10-31 16:40:31');
+INSERT INTO blog (id, title, content, user_id, publication_date)
+VALUES (4, 'Blog#2', 'Content Text', 1, '2017-10-31 16:40:31');
 
 INSERT INTO category(id, genre, added_date) VALUES (2, 'News', '2017-10-31 16:40:31');
 INSERT INTO category(id, genre, added_date) VALUES (3, 'Advertisement', '2017-10-31 16:40:31');
 
 INSERT INTO blog_category_assignment(blog_id, category_id, date) VALUES (1, 2, '2017-10-31 16:40:31');
+INSERT INTO blog_category_assignment(blog_id, category_id, date) VALUES (1, 3, '2017-10-31 16:40:31');
+INSERT INTO blog_category_assignment(blog_id, category_id, date) VALUES (4, 2, '2017-10-31 16:40:31');
