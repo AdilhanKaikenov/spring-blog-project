@@ -4,11 +4,13 @@ import com.epam.adok.core.dao.Dao;
 import com.epam.adok.core.entity.AbstractBaseEntity;
 import com.mysema.query.jpa.impl.JPAQuery;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.List;
 
+@Repository
 public abstract class GenericDao<T extends AbstractBaseEntity> implements Dao<T> {
 
     @Autowired
