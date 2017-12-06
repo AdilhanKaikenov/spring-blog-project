@@ -1,9 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Message</title>
+    <title>Blog</title>
 </head>
 <body>
-    <h1>Message : ${message}</h1>
+<h2>${blog.content}</h2>
 </body>
 </html>
