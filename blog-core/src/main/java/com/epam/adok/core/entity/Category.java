@@ -1,13 +1,14 @@
 package com.epam.adok.core.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.PrimaryKeyJoinColumn;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Date;
 
 @Entity
+@NamedQueries({
+        @NamedQuery(name = "Category.readById", query = "SELECT category FROM Category category WHERE category.id = :id"),
+        @NamedQuery(name = "Category.readAll", query = "SELECT category FROM Category category")
+})
 @Table(name = "category")
 @PrimaryKeyJoinColumn(name = "id", referencedColumnName = "id")
 @XmlRootElement
