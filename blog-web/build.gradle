@@ -3,8 +3,33 @@ version '1.0-SNAPSHOT'
 
 apply plugin: 'war'
 
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "com.bmuschko:gradle-tomcat-plugin:2.4.2"
+    }
+}
+
+apply plugin: "com.bmuschko.tomcat"
+
+dependencies {
+    def tomcatVersion = '8.5.23'
+    tomcat "org.apache.tomcat.embed:tomcat-embed-core:${tomcatVersion}",
+            "org.apache.tomcat.embed:tomcat-embed-logging-juli:8.5.2",
+            "org.apache.tomcat.embed:tomcat-embed-jasper:${tomcatVersion}"
+}
+
 dependencies {
     compile project(":blog-core")
     compile 'javax.servlet:javax.servlet-api:4.0.0'
+    compile 'joda-time:joda-time:2.9.9'
     compile 'jstl:jstl:1.2'
+}
+
+tomcat {
+
 }
