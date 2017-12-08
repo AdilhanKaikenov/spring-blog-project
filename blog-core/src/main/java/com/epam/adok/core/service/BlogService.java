@@ -1,6 +1,7 @@
 package com.epam.adok.core.service;
 
 import com.epam.adok.core.dao.BlogDao;
+import com.epam.adok.core.dao.impl.blog.BlogFilter;
 import com.epam.adok.core.entity.Blog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,5 +20,10 @@ public class BlogService {
 
     public List<Blog> findAllBlogs() {
         return blogDao.readAll();
+    }
+
+
+    public List<Blog> findAllBlogsByParameters(BlogFilter filter) {
+        return blogDao.readByParameters(filter);
     }
 }
