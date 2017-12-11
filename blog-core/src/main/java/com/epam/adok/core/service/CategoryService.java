@@ -21,4 +21,7 @@ public class CategoryService {
         return categoryDao.readAll();
     }
 
+    public List<Category> findAllCategoriesByIdList(List<Integer> ids) {
+        return categoryDao.readByIdList(ids);
+    }
 }

@@ -13,7 +13,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -33,18 +37,15 @@ public class SpringMvcController {
     private CategoryService categoryService;
 
     @RequestMapping(value = "/blog/", method = RequestMethod.GET)
-    public ModelAndView blogs() {
+    public ModelAndView blogs(ModelAndView modelAndView) {
 
         List<Blog> blogs = blogService.findAllBlogs();
 
-        List<Category> categories = categoryService.findAllCategories();
+        modelAndView.addObject("blogs", blogs);
+        modelAndView.addObject("filter", new BlogFilter());
+        modelAndView.setViewName("blogs");
 
-        ModelAndView model = new ModelAndView();
-        model.addObject("blogs", blogs);
-        model.addObject("categories", categories);
-        model.setViewName("blogs");
-
-        return model;
+        return modelAndView;
     }
 
     @RequestMapping(value = "/blog/{id}", method = RequestMethod.GET)
@@ -64,43 +65,34 @@ public class SpringMvcController {
     }
 
     @RequestMapping(value = "/filter", method = RequestMethod.POST)
-    public ModelAndView filter(HttpServletRequest request) throws DateParsingException {
-        ModelAndView model = new ModelAndView();
-        String from = request.getParameter("from");
-        String to = request.getParameter("to");
-        String[] categoryLists = request.getParameterValues("categoryList");
+    public ModelAndView filter(@ModelAttribute("filter") BlogFilter filter,
+                               ModelAndView modelAndView,
+                               @Nullable @RequestParam("categoryIds") String[] categoryIds) throws DateParsingException {
 
-        Date dateFrom = null;
-        if (!from.equals("")) {
-            dateFrom = DateUtil.parseStringToDate(from);
-        }
+        modelAndView.addObject("filter", filter);
 
-        Date dateTo = null;
-        if (!to.equals("")) {
-            dateTo = DateUtil.parseStringToDate(to);
-        }
-
-        Set<Category> categories = new HashSet<>();
-
-        if (categoryLists != null) {
-            for (String categoryID : categoryLists) {
-                categories.add(categoryService.findCategoryByID(Integer.parseInt(categoryID)));
+        List<Integer> categoryIdList = new ArrayList<>();
+        List<Category> allCategoriesByIdList = null;
+        if (categoryIds != null) {
+            for (String categoryId : categoryIds) {
+                categoryIdList.add(Integer.parseInt(categoryId));
             }
+            allCategoriesByIdList = categoryService.findAllCategoriesByIdList(categoryIdList);
         }
 
-        BlogFilter blogFilter = new BlogFilter();
-        blogFilter.setDateRange(new DateRange(dateFrom, dateTo));
-        blogFilter.setCategories(categories);
+        filter.setCategories(allCategoriesByIdList);
+        List<Blog> blogs = blogService.findAllBlogsByParameters(filter);
 
-        List<Blog> blogs = blogService.findAllBlogsByParameters(blogFilter);
-        List<Category> allCategories = categoryService.findAllCategories();
+        modelAndView.addObject("blogs", blogs);
 
-        model.addObject("blogs", blogs);
-        model.addObject("categories", allCategories);
+        modelAndView.setViewName("blogs");
 
-        model.setViewName("blogs");
+        return modelAndView;
+    }
 
-        return model;
+    @ModelAttribute("categoryList")
+    public List<Category> getCategoryList() {
+        return categoryService.findAllCategories();
     }
 
     @ResponseStatus(code = HttpStatus.NOT_FOUND, reason = "The result with this ID was not found.")

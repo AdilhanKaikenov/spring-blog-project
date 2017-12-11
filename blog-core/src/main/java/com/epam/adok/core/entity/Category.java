@@ -7,7 +7,8 @@ import java.util.Date;
 @Entity
 @NamedQueries({
         @NamedQuery(name = "Category.readById", query = "SELECT category FROM Category category WHERE category.id = :id"),
-        @NamedQuery(name = "Category.readAll", query = "SELECT category FROM Category category")
+        @NamedQuery(name = "Category.readAll", query = "SELECT category FROM Category category"),
+        @NamedQuery(name = "Category.readByIdList", query = "SELECT category FROM Category category WHERE category.id = :idList")
 })
 @Table(name = "category")
 @PrimaryKeyJoinColumn(name = "id", referencedColumnName = "id")

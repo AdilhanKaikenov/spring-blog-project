@@ -10,7 +10,7 @@ import com.mysema.query.types.expr.BooleanExpression;
 
 import javax.persistence.EntityManager;
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 import static com.epam.adok.core.entity.QBlog.blog;
 
@@ -33,7 +33,7 @@ public class BlogQueryBuilder {
 
     private BooleanExpression handleFilterParameters(BlogFilter filter) {
 
-        Set<Category> categories = filter.getCategories();
+        List<Category> categories = filter.getCategories();
 
         DateRange dateRange = filter.getDateRange();
         Date from = dateRange.getFrom();

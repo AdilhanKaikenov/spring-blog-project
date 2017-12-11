@@ -3,15 +3,16 @@ package com.epam.adok.core.dao.impl.blog;
 import com.epam.adok.core.entity.Category;
 import com.epam.adok.core.util.DateRange;
 
+import java.util.List;
 import java.util.Set;
 
 public class BlogFilter {
 
-    private Set<Category> categories;
+    private List<Category> categories;
 
     private DateRange dateRange;
 
-    public BlogFilter(Set<Category> categories, DateRange dateRange) {
+    public BlogFilter(List<Category> categories, DateRange dateRange) {
         this.categories = categories;
         this.dateRange = dateRange;
     }
@@ -19,11 +20,11 @@ public class BlogFilter {
     public BlogFilter() {
     }
 
-    public Set<Category> getCategories() {
+    public List<Category> getCategories() {
         return categories;
     }
 
-    public void setCategories(Set<Category> categories) {
+    public void setCategories(List<Category> categories) {
         this.categories = categories;
     }
 

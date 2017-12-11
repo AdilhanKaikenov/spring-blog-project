@@ -5,6 +5,7 @@ import com.epam.adok.core.entity.Category;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.Query;
+import java.util.List;
 
 @Repository
 public class CategoryDaoImpl extends GenericDao<Category> implements CategoryDao {
@@ -19,5 +20,12 @@ public class CategoryDaoImpl extends GenericDao<Category> implements CategoryDao
     @Override
     protected Query getReadAllNamedQuery() {
         return getEntityManager().createNamedQuery("Category.readAll");
+    }
+
+    @Override
+    public List<Category> readByIdList(List<Integer> ids) {
+        Query query = getEntityManager().createNamedQuery("Category.readByIdList");
+        query.setParameter("idList", ids);
+        return  query.getResultList();
     }
 }

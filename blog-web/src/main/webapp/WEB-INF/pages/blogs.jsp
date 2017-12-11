@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <html>
 <head>
@@ -8,24 +9,28 @@
 <body>
 <table align="center">
     <tr>
-        <form method="post" action="${pageContext.request.contextPath}/filter">
+        <%--@elvariable id="filter" type="com.epam.adok.core.dao.impl.blog.BlogFilter"--%>
+        <form:form method="post" action="${pageContext.request.contextPath}/filter" modelAttribute="filter">
             <td>
-                <input type="date" name="from">
+                <form:input type="date" path="dateRange.from"/>
             </td>
             <td>
-                <input type="date" name="to">
+                <form:input type="date" path="dateRange.to"/>
             </td>
             <td>
-                <%--@elvariable id="categories" type="java.util.List"--%>
-                <c:forEach items="${categories}" var="category">
+                    <%--@elvariable id="categoryList" type="java.util.List"--%>
+                    <%--<form:checkboxes path="categories" items="${categoryList}" />--%>
+
+                <c:forEach items="${categoryList}" var="category">
                     <%--@elvariable id="category" type="com.epam.adok.core.entity.Category"--%>
-                    <br><input type="checkbox" name="categoryList" value="${category.id}">${category.genre}
+                    <%--<br><form:checkbox path="categories" value="${category}"/>${category.genre}--%>
+                    <br><input type="checkbox" name="categoryIds" value="${category.id}">${category.genre}
                 </c:forEach>
             </td>
             <td>
                 <button type="submit">Filter</button>
             </td>
-        </form>
+        </form:form>
     </tr>
 </table>
 <table border="1" cellpadding="2" align="center">
