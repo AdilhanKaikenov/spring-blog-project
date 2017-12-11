@@ -10,20 +10,16 @@ buildscript {
         }
     }
     dependencies {
-        classpath "com.bmuschko:gradle-tomcat-plugin:2.4.2"
+        classpath "com.bmuschko:gradle-cargo-plugin:2.2.3"
     }
 }
 
-apply plugin: "com.bmuschko.tomcat"
+apply plugin: "com.bmuschko.cargo"
 
 dependencies {
-    def tomcatVersion = '8.5.23'
-    tomcat "org.apache.tomcat.embed:tomcat-embed-core:${tomcatVersion}",
-            "org.apache.tomcat.embed:tomcat-embed-logging-juli:8.5.2",
-            "org.apache.tomcat.embed:tomcat-embed-jasper:${tomcatVersion}"
-}
-
-dependencies {
+    def cargoVersion = '1.4.5'
+    cargo "org.codehaus.cargo:cargo-core-uberjar:$cargoVersion",
+            "org.codehaus.cargo:cargo-ant:$cargoVersion"
     compile project(":blog-core")
     compile 'javax.servlet:javax.servlet-api:4.0.0'
     compile 'org.apache.tiles:tiles-core:3.0.8'
@@ -34,6 +30,16 @@ dependencies {
     compile 'jstl:jstl:1.2'
 }
 
-tomcat {
+cargo {
+    containerId = 'tomcat8x'
+    port = 8080
 
+    deployable {
+        file = file('/build/libs/blog-web-1.0-SNAPSHOT.war')
+        context = 'blog-web'
+    }
+
+    local {
+        homeDir = file('C:\\apache-tomcat-8.5.23')
+    }
 }
