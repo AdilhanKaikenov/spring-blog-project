@@ -26,6 +26,11 @@ public class BlogService {
         return blogDao.readAll();
     }
 
+    public void removeBlogByID(int id) {
+        Blog targetBlog = new Blog();
+        targetBlog.setId(id);
+        blogDao.delete(targetBlog);
+    }
 
     public List<Blog> findAllBlogsByParameters(BlogFilter filter) {
         return blogDao.readByParameters(filter);

@@ -37,6 +37,7 @@ public abstract class GenericDao<T extends AbstractBaseEntity> implements Dao<T>
         entityManager.merge(t);
     }
 
+    @Transactional
     @Override
     public void delete(T t) {
         entityManager.remove(entityManager.contains(t) ? t : entityManager.merge(t));

@@ -106,7 +106,21 @@ public class SpringMvcController {
 
         blogService.createBlog(blog);
 
-        modelAndView.setViewName("redirect:/blog");
+        modelAndView.setViewName("redirect:blog");
+
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/delete&id={id}", method = RequestMethod.GET)
+    public ModelAndView delete(
+            @PathVariable("id") String sourceId,
+            ModelAndView modelAndView) {
+
+        int id = Integer.parseInt(sourceId);
+
+        blogService.removeBlogByID(id);
+
+        modelAndView.setViewName("redirect:blog");
 
         return modelAndView;
     }
