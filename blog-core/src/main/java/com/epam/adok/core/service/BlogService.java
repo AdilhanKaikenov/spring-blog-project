@@ -14,6 +14,10 @@ public class BlogService {
     @Autowired
     private BlogDao blogDao;
 
+    public void createBlog(Blog blog) {
+        blogDao.save(blog);
+    }
+
     public Blog findBlogByID(int id) {
         return blogDao.read(id);
     }

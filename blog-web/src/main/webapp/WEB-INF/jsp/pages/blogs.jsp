@@ -64,4 +64,9 @@
             </td>
         </tr>
     </c:forEach>
+    <tr>
+        <td colspan="4" align="center">
+            <a href="${pageContext.request.contextPath}/create">New Blog</a>
+        </td>
+    </tr>
 </table>

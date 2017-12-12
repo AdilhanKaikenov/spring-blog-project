@@ -3,6 +3,7 @@ package com.epam.adok.web.controller;
 import com.epam.adok.core.dao.impl.blog.BlogFilter;
 import com.epam.adok.core.entity.Blog;
 import com.epam.adok.core.entity.Category;
+import com.epam.adok.core.entity.User;
 import com.epam.adok.core.exception.DateParsingException;
 import com.epam.adok.core.service.BlogService;
 import com.epam.adok.core.service.CategoryService;
@@ -18,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.persistence.NoResultException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 @Controller
@@ -31,7 +33,7 @@ public class SpringMvcController {
     @Autowired
     private CategoryService categoryService;
 
-    @RequestMapping(value = "/blog/", method = RequestMethod.GET)
+    @RequestMapping(value = "/blog", method = RequestMethod.GET)
     public ModelAndView blogs(ModelAndView modelAndView) {
 
         List<Blog> blogs = blogService.findAllBlogs();
@@ -66,14 +68,7 @@ public class SpringMvcController {
 
         modelAndView.addObject("filter", filter);
 
-        List<Integer> categoryIdList = new ArrayList<>();
-        List<Category> allCategoriesByIdList = null;
-        if (categoryIds != null) {
-            for (String categoryId : categoryIds) {
-                categoryIdList.add(Integer.parseInt(categoryId));
-            }
-            allCategoriesByIdList = categoryService.findAllCategoriesByIdList(categoryIdList);
-        }
+        List<Category> allCategoriesByIdList = getCategoriesByIds(categoryIds);
 
         filter.setCategories(allCategoriesByIdList);
         List<Blog> blogs = blogService.findAllBlogsByParameters(filter);
@@ -81,6 +76,37 @@ public class SpringMvcController {
         modelAndView.addObject("blogs", blogs);
 
         modelAndView.setViewName("blogs");
+
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/create", method = RequestMethod.GET)
+    public ModelAndView getBlogCreatePage(ModelAndView modelAndView) {
+        modelAndView.addObject("newBlog", new Blog());
+        modelAndView.setViewName("create-new-blog");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/create", method = RequestMethod.POST)
+    public ModelAndView create(
+            @ModelAttribute("newBlog") Blog blog,
+            @RequestParam("categoryIds") String[] categoryIds,
+            ModelAndView modelAndView) {
+
+        List<Category> categories = getCategoriesByIds(categoryIds);
+
+        for (Category category : categories) {
+            blog.getCategories().add(category);
+        }
+
+        User user = new User(); // TODO : User
+        user.setId(1); // User ID : 1
+
+        blog.setAuthor(user);
+
+        blogService.createBlog(blog);
+
+        modelAndView.setViewName("redirect:/blog");
 
         return modelAndView;
     }
@@ -93,5 +119,17 @@ public class SpringMvcController {
     @ResponseStatus(code = HttpStatus.NOT_FOUND, reason = "The result with this ID was not found.")
     @ExceptionHandler({NoResultException.class, NotFoundException.class})
     public void handleNotFound() {
+    }
+
+    private List<Category> getCategoriesByIds(String[] categoryIds) {
+        List<Integer> categoryIdList = new ArrayList<>();
+        List<Category> allCategoriesByIdList = null;
+        if (categoryIds != null) {
+            for (String categoryId : categoryIds) {
+                categoryIdList.add(Integer.parseInt(categoryId));
+            }
+            allCategoriesByIdList = categoryService.findAllCategoriesByIdList(categoryIdList);
+        }
+        return allCategoriesByIdList;
     }
 }

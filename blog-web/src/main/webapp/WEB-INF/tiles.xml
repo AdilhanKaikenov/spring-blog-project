@@ -21,7 +21,12 @@
     </definition>
 
     <definition name="edit" extends="template-def">
-        <put-attribute name="title" value="Blog"/>
+        <put-attribute name="title" value="Edit Blog"/>
         <put-attribute name="body" value="/WEB-INF/jsp/pages/edit-blog.jsp"/>
+    </definition>
+
+    <definition name="create-new-blog" extends="template-def">
+        <put-attribute name="title" value="Create New Blog"/>
+        <put-attribute name="body" value="/WEB-INF/jsp/pages/create-new-blog.jsp"/>
     </definition>
 </tiles-definitions>
