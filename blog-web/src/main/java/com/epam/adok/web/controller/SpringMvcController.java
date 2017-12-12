@@ -146,20 +146,13 @@ public class SpringMvcController {
             @ModelAttribute("editBlog") Blog blog,
             @RequestParam("categoryIds") String[] categoryIds,
             ModelAndView modelAndView) {
-        log.info("/blog/edit");
         List<Category> categories = getCategoriesByIds(categoryIds);
-        log.info("1");
         blog.setCategories(new HashSet<>(categories));
-        log.info("2");
-
-        log.info("ID : {}", blog.getId());
         Blog targetBlog = blogService.findBlogByID(blog.getId());
-        log.info("3");
 
         targetBlog.setTitle(blog.getTitle());
         targetBlog.setContent(blog.getContent());
         targetBlog.setCategories(blog.getCategories());
-        log.info("4");
 
         blogService.updateBlog(targetBlog);
 
