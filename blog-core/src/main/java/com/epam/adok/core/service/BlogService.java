@@ -32,6 +32,10 @@ public class BlogService {
         blogDao.delete(targetBlog);
     }
 
+    public void updateBlog(Blog blog) {
+        blogDao.update(blog);
+    }
+
     public List<Blog> findAllBlogsByParameters(BlogFilter filter) {
         return blogDao.readByParameters(filter);
     }

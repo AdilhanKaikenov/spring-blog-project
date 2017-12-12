@@ -32,6 +32,7 @@ public abstract class GenericDao<T extends AbstractBaseEntity> implements Dao<T>
         entityManager.persist(t);
     }
 
+    @Transactional
     @Override
     public void update(T t) {
         entityManager.merge(t);

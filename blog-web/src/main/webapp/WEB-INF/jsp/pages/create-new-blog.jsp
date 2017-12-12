@@ -5,7 +5,7 @@
 <table border="1px" cellpadding="30%" align="center">
     <h2 align="center">Create New Blog</h2>
     <%--@elvariable id="newBlog" type="com.epam.adok.core.entity.Blog"--%>
-    <form:form method="post" action="${pageContext.request.contextPath}/create" modelAttribute="newBlog">
+    <form:form method="post" action="${pageContext.request.contextPath}/blog/create" modelAttribute="newBlog">
         <tr>
             <td>Title :</td>
             <td><form:input path="title"/></td>

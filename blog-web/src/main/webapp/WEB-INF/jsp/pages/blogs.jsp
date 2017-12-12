@@ -5,7 +5,7 @@
 <table align="center">
     <tr>
         <%--@elvariable id="filter" type="com.epam.adok.core.dao.impl.blog.BlogFilter"--%>
-        <form:form method="post" action="${pageContext.request.contextPath}/filter" modelAttribute="filter">
+        <form:form method="post" action="${pageContext.request.contextPath}/blog/filter" modelAttribute="filter">
             <td>
                 <form:input type="date" path="dateRange.from"/>
             </td>
@@ -66,7 +66,7 @@
     </c:forEach>
     <tr>
         <td colspan="4" align="center">
-            <a href="${pageContext.request.contextPath}/create">New Blog</a>
+            <a href="${pageContext.request.contextPath}/blog/create">New Blog</a>
         </td>
     </tr>
 </table>

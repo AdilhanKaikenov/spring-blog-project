@@ -61,12 +61,12 @@ public class SpringMvcController {
         return model;
     }
 
-    @RequestMapping(value = "/filter", method = RequestMethod.POST)
+    @RequestMapping(value = "/blog/filter", method = RequestMethod.POST)
     public ModelAndView filter(@ModelAttribute("filter") BlogFilter filter,
-                               ModelAndView modelAndView,
-                               @Nullable @RequestParam("categoryIds") String[] categoryIds) throws DateParsingException {
+                               @Nullable @RequestParam("categoryIds") String[] categoryIds,
+                               ModelAndView modelAndView) throws DateParsingException {
 
-        modelAndView.addObject("filter", filter);
+//        modelAndView.addObject("filter", filter);
 
         List<Category> allCategoriesByIdList = getCategoriesByIds(categoryIds);
 
@@ -80,14 +80,14 @@ public class SpringMvcController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/create", method = RequestMethod.GET)
+    @RequestMapping(value = "/blog/create", method = RequestMethod.GET)
     public ModelAndView getBlogCreatePage(ModelAndView modelAndView) {
         modelAndView.addObject("newBlog", new Blog());
         modelAndView.setViewName("create-new-blog");
         return modelAndView;
     }
 
-    @RequestMapping(value = "/create", method = RequestMethod.POST)
+    @RequestMapping(value = "/blog/create", method = RequestMethod.POST)
     public ModelAndView create(
             @ModelAttribute("newBlog") Blog blog,
             @RequestParam("categoryIds") String[] categoryIds,
@@ -95,9 +95,7 @@ public class SpringMvcController {
 
         List<Category> categories = getCategoriesByIds(categoryIds);
 
-        for (Category category : categories) {
-            blog.getCategories().add(category);
-        }
+        blog.setCategories(new HashSet<>(categories));
 
         User user = new User(); // TODO : User
         user.setId(1); // User ID : 1
@@ -106,12 +104,12 @@ public class SpringMvcController {
 
         blogService.createBlog(blog);
 
-        modelAndView.setViewName("redirect:blog");
+        modelAndView.setViewName("redirect:/blog");
 
         return modelAndView;
     }
 
-    @RequestMapping(value = "/delete&id={id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/blog/{id}/delete", method = RequestMethod.GET)
     public ModelAndView delete(
             @PathVariable("id") String sourceId,
             ModelAndView modelAndView) {
@@ -120,7 +118,53 @@ public class SpringMvcController {
 
         blogService.removeBlogByID(id);
 
-        modelAndView.setViewName("redirect:blog");
+        modelAndView.setViewName("redirect:/blog");
+
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/blog/{id}/edit", method = RequestMethod.GET)
+    public ModelAndView getBlogEditPage(
+            @PathVariable("id") String sourceId,
+            ModelAndView modelAndView) {
+
+        int id = Integer.parseInt(sourceId);
+
+        Blog blog = blogService.findBlogByID(id);
+
+        log.info("Author$ : {}", blog.getAuthor().getLogin());
+
+        modelAndView.addObject("editBlog", blog);
+
+        modelAndView.setViewName("edit");
+
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/blog/edit", method = RequestMethod.POST)
+    public ModelAndView edit(
+            @ModelAttribute("editBlog") Blog blog,
+            @RequestParam("categoryIds") String[] categoryIds,
+            ModelAndView modelAndView) {
+        log.info("/blog/edit");
+        List<Category> categories = getCategoriesByIds(categoryIds);
+        log.info("1");
+        blog.setCategories(new HashSet<>(categories));
+        log.info("2");
+
+        log.info("ID : {}", blog.getId());
+        Blog targetBlog = blogService.findBlogByID(blog.getId());
+        log.info("3");
+
+        targetBlog.setTitle(blog.getTitle());
+        targetBlog.setContent(blog.getContent());
+        targetBlog.setCategories(blog.getCategories());
+        log.info("4");
+
+        blogService.updateBlog(targetBlog);
+
+        modelAndView.setViewName("redirect:/blog/" + blog.getId());
+
 
         return modelAndView;
     }
