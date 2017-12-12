@@ -66,8 +66,6 @@ public class SpringMvcController {
                                @Nullable @RequestParam("categoryIds") String[] categoryIds,
                                ModelAndView modelAndView) throws DateParsingException {
 
-//        modelAndView.addObject("filter", filter);
-
         List<Category> allCategoriesByIdList = getCategoriesByIds(categoryIds);
 
         filter.setCategories(allCategoriesByIdList);
@@ -131,8 +129,6 @@ public class SpringMvcController {
         int id = Integer.parseInt(sourceId);
 
         Blog blog = blogService.findBlogByID(id);
-
-        log.info("Author$ : {}", blog.getAuthor().getLogin());
 
         modelAndView.addObject("editBlog", blog);
 
