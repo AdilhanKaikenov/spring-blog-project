@@ -13,7 +13,6 @@ import java.util.Set;
 })
 @Table(name = "blog")
 @PrimaryKeyJoinColumn(name = "id", referencedColumnName = "id")
-@XmlRootElement
 public class Blog extends UniqueIdEntity {
 
     @Column(name = "title")

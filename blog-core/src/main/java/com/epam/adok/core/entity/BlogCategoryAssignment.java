@@ -9,7 +9,6 @@ import java.util.Date;
 
 @Entity
 @Table(name = "blog_category_assignment")
-@XmlRootElement
 public class BlogCategoryAssignment implements Serializable, Identifiable<BlogCategoryID> {
 
     @EmbeddedId

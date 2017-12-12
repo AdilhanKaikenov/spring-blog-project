@@ -1,11 +1,12 @@
 package com.epam.adok.core.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
+@NamedQueries({
+        @NamedQuery(name = "User.readById", query = "SELECT user FROM User user WHERE user.id = :id")
+})
 @Table(name = "user")
 public class User extends AbstractBaseEntity {
 

@@ -12,7 +12,6 @@ import java.util.Date;
 })
 @Table(name = "category")
 @PrimaryKeyJoinColumn(name = "id", referencedColumnName = "id")
-@XmlRootElement
 public class Category extends UniqueIdEntity {
 
     @Column(name = "genre")
