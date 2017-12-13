@@ -29,7 +29,8 @@
             </td>
         </tr>
         <td colspan="2" align="center">
-            <button type="submit">Create New Blog</button>
+            <button type="submit">Update Blog</button> |
+            <a href="${pageContext.request.contextPath}/blog/${editBlog.id}">Back</a>
         </td>
     </form:form>
 </table>

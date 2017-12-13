@@ -5,8 +5,9 @@
 <%--@elvariable id="blog" type="com.epam.adok.core.entity.Blog"--%>
 <h1>${blog.title}</h1>
 <h3>${blog.content}</h3>
-<a href="${pageContext.request.contextPath}/blog/${blog.id}/edit">Edit</a>
-<a href="${pageContext.request.contextPath}/blog/${blog.id}/delete">Delete</a>
+<a href="${pageContext.request.contextPath}/blog/${blog.id}/edit">Edit</a> |
+<a href="${pageContext.request.contextPath}/blog/${blog.id}/delete">Delete</a> |
+<a href="${pageContext.request.contextPath}/blog">Back</a>
 <%--@elvariable id="blogComments" type="java.util.List"--%>
 <c:if test="${not empty blogComments}">
 <%--@elvariable id="blogComment" type="com.epam.adok.core.entity.comment.BlogComment"--%>
