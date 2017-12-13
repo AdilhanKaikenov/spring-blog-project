@@ -10,7 +10,7 @@
 <a href="${pageContext.request.contextPath}/blog">Back</a>
 <%--@elvariable id="blogComments" type="java.util.List"--%>
 <c:if test="${not empty blogComments}">
-<%--@elvariable id="blogComment" type="com.epam.adok.core.entity.comment.BlogComment"--%>
+    <%--@elvariable id="blogComment" type="com.epam.adok.core.entity.comment.BlogComment"--%>
     <c:forEach items="${blogComments}" var="blogComment">
         <div>
             <h4>From : ${blogComment.user.login} | Date : ${blogComment.commentDate}</h4>
@@ -21,3 +21,22 @@
         </div>
     </c:forEach>
 </c:if>
+<div>
+    <table width="100%">
+        <%--@elvariable id="comment" type="com.epam.adok.core.entity.comment.BlogComment"--%>
+        <form:form method="post" action="${pageContext.request.contextPath}/blog/comment/submit"
+                   modelAttribute="comment">
+            <input type="hidden" name="blogId" value="${blog.id}"/>
+            <tr>
+                <td>
+                    <form:textarea path="text"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <button type="submit">Submit</button>
+                </td>
+            </tr>
+        </form:form>
+    </table>
+</div>

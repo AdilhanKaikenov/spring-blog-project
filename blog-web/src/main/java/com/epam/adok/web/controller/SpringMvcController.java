@@ -21,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.persistence.NoResultException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
@@ -64,9 +65,31 @@ public class SpringMvcController {
         ModelAndView model = new ModelAndView();
         model.addObject("blog", blog);
         model.addObject("blogComments", allBlogComments);
+        model.addObject("comment", new BlogComment());
         model.setViewName("blog");
 
         return model;
+    }
+
+    @RequestMapping(value = "/blog/comment/submit", method = RequestMethod.POST)
+    public ModelAndView commentSubmit(@ModelAttribute("comment") BlogComment blogComment,
+                                      @RequestParam("blogId") int id,
+                                      ModelAndView modelAndView) {
+
+        User user = new User(); // TODO : User
+        user.setId(1); // User ID : 1
+
+        blogComment.setUser(user);
+        blogComment.setCommentDate(new Date());
+        Blog blog = new Blog();
+        blog.setId(id);
+        blogComment.setBlog(blog);
+
+        blogCommentService.submitComment(blogComment);
+
+        modelAndView.setViewName("redirect:/blog/" + id);
+
+        return modelAndView;
     }
 
     @RequestMapping(value = "/blog/filter", method = RequestMethod.POST)
@@ -161,7 +184,6 @@ public class SpringMvcController {
         blogService.updateBlog(targetBlog);
 
         modelAndView.setViewName("redirect:/blog/" + blog.getId());
-
 
         return modelAndView;
     }
