@@ -29,4 +29,11 @@ public class CommentDaoImpl<T extends AbstractComment> extends GenericDao<T> imp
         query.setParameter("id", id);
         return query.getResultList();
     }
+
+    @Override
+    public void removeAllByBlogId(int id) {
+        Query query = getEntityManager().createNamedQuery("BlogComment.deleteAllBlogId");
+        query.setParameter("id", id);
+        query.executeUpdate();
+    }
 }

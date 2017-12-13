@@ -25,4 +25,8 @@ public class CommentService<T extends AbstractComment> {
     public List<BlogComment> findAllBlogCommentByBlogId(int blogID) {
         return commentDao.readAllByBlogId(blogID);
     }
+
+    public void removeAllBlogCommentsByBlogId(int blogId) {
+        commentDao.removeAllByBlogId(blogId);
+    }
 }

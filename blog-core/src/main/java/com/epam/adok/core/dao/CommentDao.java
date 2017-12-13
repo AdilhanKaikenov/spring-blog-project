@@ -9,4 +9,6 @@ public interface CommentDao<T extends AbstractComment> extends Dao<T> {
 
     List<BlogComment> readAllByBlogId(int id);
 
+    void removeAllByBlogId(int id);
+
 }

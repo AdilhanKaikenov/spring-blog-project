@@ -1,9 +1,12 @@
 package com.epam.adok.core.entity;
 
+import com.epam.adok.core.entity.comment.BlogComment;
+
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -21,7 +24,6 @@ public class Blog extends UniqueIdEntity {
     @Column(name = "content")
     private String content;
 
-//    @OneToOne
     @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "user_id")
     private User author;

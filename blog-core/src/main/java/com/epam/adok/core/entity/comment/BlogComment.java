@@ -6,12 +6,13 @@ import javax.persistence.*;
 
 @Entity
 @NamedQueries({
-        @NamedQuery(name = "BlogComment.readAllByBlogId", query = "SELECT comment FROM BlogComment comment WHERE comment.blog.id = :id")
+        @NamedQuery(name = "BlogComment.readAllByBlogId", query = "SELECT comment FROM BlogComment comment WHERE comment.blog.id = :id"),
+        @NamedQuery(name = "BlogComment.deleteAllBlogId", query = "DELETE FROM BlogComment comment WHERE comment.blog.id = :id")
 })
 @DiscriminatorValue("BT")
 public class BlogComment extends AbstractComment {
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name="blog_id")
     private Blog blog;
 
