@@ -12,7 +12,7 @@ import javax.persistence.*;
 @DiscriminatorValue("BT")
 public class BlogComment extends AbstractComment {
 
-    @OneToOne(cascade = CascadeType.REMOVE)
+    @OneToOne
     @JoinColumn(name="blog_id")
     private Blog blog;
 

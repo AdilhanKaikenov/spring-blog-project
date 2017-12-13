@@ -94,7 +94,7 @@ public class SpringMvcController {
 
     @RequestMapping(value = "/blog/filter", method = RequestMethod.POST)
     public ModelAndView filter(@ModelAttribute("filter") BlogFilter filter,
-                               @Nullable @RequestParam("categoryIds") String[] categoryIds,
+                               @Nullable @RequestParam("categoryIds") int[] categoryIds,
                                ModelAndView modelAndView) throws DateParsingException {
 
         List<Category> allCategoriesByIdList = getCategoriesByIds(categoryIds);
@@ -119,7 +119,7 @@ public class SpringMvcController {
     @RequestMapping(value = "/blog/create", method = RequestMethod.POST)
     public ModelAndView create(
             @ModelAttribute("newBlog") Blog blog,
-            @RequestParam("categoryIds") String[] categoryIds,
+            @RequestParam("categoryIds") int[] categoryIds,
             ModelAndView modelAndView) {
 
         List<Category> categories = getCategoriesByIds(categoryIds);
@@ -171,7 +171,7 @@ public class SpringMvcController {
     @RequestMapping(value = "/blog/edit", method = RequestMethod.POST)
     public ModelAndView edit(
             @ModelAttribute("editBlog") Blog blog,
-            @RequestParam("categoryIds") String[] categoryIds,
+            @RequestParam("categoryIds") int[] categoryIds,
             ModelAndView modelAndView) {
         List<Category> categories = getCategoriesByIds(categoryIds);
         blog.setCategories(new HashSet<>(categories));
@@ -198,12 +198,12 @@ public class SpringMvcController {
     public void handleNotFound() {
     }
 
-    private List<Category> getCategoriesByIds(String[] categoryIds) {
+    private List<Category> getCategoriesByIds(int[] categoryIds) {
         List<Integer> categoryIdList = new ArrayList<>();
         List<Category> allCategoriesByIdList = null;
         if (categoryIds != null) {
-            for (String categoryId : categoryIds) {
-                categoryIdList.add(Integer.parseInt(categoryId));
+            for (int categoryId : categoryIds) {
+                categoryIdList.add(categoryId);
             }
             allCategoriesByIdList = categoryService.findAllCategoriesByIdList(categoryIdList);
         }
