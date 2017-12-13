@@ -4,7 +4,6 @@ import com.epam.adok.core.entity.Category;
 import com.epam.adok.core.util.DateRange;
 
 import java.util.List;
-import java.util.Set;
 
 public class BlogFilter {
 

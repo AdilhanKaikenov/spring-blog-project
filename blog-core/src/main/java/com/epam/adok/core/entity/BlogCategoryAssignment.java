@@ -3,7 +3,6 @@ package com.epam.adok.core.entity;
 import com.epam.adok.core.util.interfaces.Identifiable;
 
 import javax.persistence.*;
-import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.Date;
 

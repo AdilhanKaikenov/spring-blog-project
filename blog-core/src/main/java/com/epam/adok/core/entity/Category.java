@@ -1,7 +1,6 @@
 package com.epam.adok.core.entity;
 
 import javax.persistence.*;
-import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Date;
 
 @Entity
