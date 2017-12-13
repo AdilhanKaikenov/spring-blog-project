@@ -4,9 +4,11 @@ import com.epam.adok.core.dao.impl.blog.BlogFilter;
 import com.epam.adok.core.entity.Blog;
 import com.epam.adok.core.entity.Category;
 import com.epam.adok.core.entity.User;
+import com.epam.adok.core.entity.comment.BlogComment;
 import com.epam.adok.core.exception.DateParsingException;
 import com.epam.adok.core.service.BlogService;
 import com.epam.adok.core.service.CategoryService;
+import com.epam.adok.core.service.CommentService;
 import com.epam.adok.web.exception.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +35,9 @@ public class SpringMvcController {
     @Autowired
     private CategoryService categoryService;
 
+    @Autowired
+    private CommentService<BlogComment> blogCommentService;
+
     @RequestMapping(value = "/blog", method = RequestMethod.GET)
     public ModelAndView blogs(ModelAndView modelAndView) {
 
@@ -50,12 +55,15 @@ public class SpringMvcController {
 
         Blog blog = blogService.findBlogByID(id);
 
+        List<BlogComment> allBlogComments = blogCommentService.findAllBlogCommentByBlogId(id);
+
         if (blog == null) {
             throw new NotFoundException();
         }
 
         ModelAndView model = new ModelAndView();
         model.addObject("blog", blog);
+        model.addObject("blogComments", allBlogComments);
         model.setViewName("blog");
 
         return model;

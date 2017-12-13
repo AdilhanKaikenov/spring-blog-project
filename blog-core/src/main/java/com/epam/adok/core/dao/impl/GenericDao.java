@@ -3,7 +3,6 @@ package com.epam.adok.core.dao.impl;
 import com.epam.adok.core.dao.Dao;
 import com.epam.adok.core.entity.AbstractBaseEntity;
 import com.mysema.query.jpa.impl.JPAQuery;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 

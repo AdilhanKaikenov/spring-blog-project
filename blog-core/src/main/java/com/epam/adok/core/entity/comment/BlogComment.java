@@ -2,12 +2,12 @@ package com.epam.adok.core.entity.comment;
 
 import com.epam.adok.core.entity.Blog;
 
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 
 @Entity
+@NamedQueries({
+        @NamedQuery(name = "BlogComment.readAllByBlogId", query = "SELECT comment FROM BlogComment comment WHERE comment.blog.id = :id")
+})
 @DiscriminatorValue("BT")
 public class BlogComment extends AbstractComment {
 
