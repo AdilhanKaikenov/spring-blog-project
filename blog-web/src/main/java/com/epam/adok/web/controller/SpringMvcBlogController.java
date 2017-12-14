@@ -9,26 +9,27 @@ import com.epam.adok.core.exception.DateParsingException;
 import com.epam.adok.core.service.BlogService;
 import com.epam.adok.core.service.CategoryService;
 import com.epam.adok.core.service.CommentService;
+import com.epam.adok.core.util.DateRange;
 import com.epam.adok.web.exception.NotFoundException;
+import com.epam.adok.web.model.BlogCommentModel;
+import com.epam.adok.web.model.BlogFilterModel;
+import com.epam.adok.web.model.BlogModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.persistence.NoResultException;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
 @Controller
-public class SpringMvcController {
+public class SpringMvcBlogController {
 
-    private static final Logger log = LoggerFactory.getLogger(SpringMvcController.class);
+    private static final Logger log = LoggerFactory.getLogger(SpringMvcBlogController.class);
 
     @Autowired
     private BlogService blogService;
@@ -45,7 +46,7 @@ public class SpringMvcController {
         List<Blog> blogs = blogService.findAllBlogs();
 
         modelAndView.addObject("blogs", blogs);
-        modelAndView.addObject("filter", new BlogFilter());
+        modelAndView.addObject("blogFilterModel", new BlogFilterModel());
         modelAndView.setViewName("blogs");
 
         return modelAndView;
@@ -65,43 +66,22 @@ public class SpringMvcController {
         ModelAndView model = new ModelAndView();
         model.addObject("blog", blog);
         model.addObject("blogComments", allBlogComments);
-        model.addObject("comment", new BlogComment());
+
+        BlogCommentModel blogCommentModel = new BlogCommentModel();
+        blogCommentModel.setBlogId(blog.getId());
+        model.addObject("blogCommentModel", blogCommentModel);
+
         model.setViewName("blog");
 
         return model;
     }
 
-    @RequestMapping(value = "/blog/comment/submit", method = RequestMethod.POST)
-    public ModelAndView commentSubmit(@ModelAttribute("comment") BlogComment blogComment,
-                                      @RequestParam("blogId") int id,
-                                      ModelAndView modelAndView) {
-
-        User user = new User(); // TODO : User
-        user.setId(1); // User ID : 1
-
-        blogComment.setUser(user);
-        blogComment.setCommentDate(new Date());
-        Blog blog = new Blog();
-        blog.setId(id);
-        blogComment.setBlog(blog);
-
-        blogCommentService.submitComment(blogComment);
-
-        modelAndView.setViewName("redirect:/blog/" + id);
-
-        return modelAndView;
-    }
-
     @RequestMapping(value = "/blog/filter", method = RequestMethod.POST)
-    public ModelAndView filter(@ModelAttribute("filter") BlogFilter filter,
-                               @Nullable @RequestParam("categoryIds") long[] categoryIds,
+    public ModelAndView filter(@ModelAttribute("blogFilterModel") BlogFilterModel blogFilterModel,
                                ModelAndView modelAndView) throws DateParsingException {
 
-        List<Category> allCategoriesByIdList = getCategoriesByIds(categoryIds);
-
-        filter.setCategories(allCategoriesByIdList);
-        List<Blog> blogs = blogService.findAllBlogsByParameters(filter);
-
+        BlogFilter blogFilter = getBlogFilterFromModel(blogFilterModel);
+        List<Blog> blogs = blogService.findAllBlogsByParameters(blogFilter);
         modelAndView.addObject("blogs", blogs);
 
         modelAndView.setViewName("blogs");
@@ -111,26 +91,17 @@ public class SpringMvcController {
 
     @RequestMapping(value = "/blog/create", method = RequestMethod.GET)
     public ModelAndView getBlogCreatePage(ModelAndView modelAndView) {
-        modelAndView.addObject("newBlog", new Blog());
+        modelAndView.addObject("blogModelCreate", new BlogModel());
         modelAndView.setViewName("create-new-blog");
         return modelAndView;
     }
 
     @RequestMapping(value = "/blog/create", method = RequestMethod.POST)
     public ModelAndView create(
-            @ModelAttribute("newBlog") Blog blog,
-            @RequestParam("categoryIds") long[] categoryIds,
+            @ModelAttribute("blogModelCreate") BlogModel blogModel,
             ModelAndView modelAndView) {
 
-        List<Category> categories = getCategoriesByIds(categoryIds);
-
-        blog.setCategories(new HashSet<>(categories));
-
-        User user = new User(); // TODO : User
-        user.setId(1); // User ID : 1
-
-        blog.setAuthor(user);
-
+        Blog blog = getBlogFromModel(blogModel);
         blogService.createBlog(blog);
 
         modelAndView.setViewName("redirect:/blog");
@@ -144,7 +115,6 @@ public class SpringMvcController {
             ModelAndView modelAndView) {
 
         long id = Long.parseLong(sourceId);
-
         blogService.removeBlogByID(id);
 
         modelAndView.setViewName("redirect:/blog");
@@ -160,9 +130,9 @@ public class SpringMvcController {
         long id = Long.parseLong(sourceId);
 
         Blog blog = blogService.findBlogByID(id);
+        BlogModel blogModel = getBlogModelFromBlog(blog);
 
-        modelAndView.addObject("editBlog", blog);
-
+        modelAndView.addObject("blogModelEdit", blogModel);
         modelAndView.setViewName("edit");
 
         return modelAndView;
@@ -170,18 +140,11 @@ public class SpringMvcController {
 
     @RequestMapping(value = "/blog/edit", method = RequestMethod.POST)
     public ModelAndView edit(
-            @ModelAttribute("editBlog") Blog blog,
-            @RequestParam("categoryIds") long[] categoryIds,
+            @ModelAttribute("blogModelEdit") BlogModel blogModel,
             ModelAndView modelAndView) {
-        List<Category> categories = getCategoriesByIds(categoryIds);
-        blog.setCategories(new HashSet<>(categories));
-        Blog targetBlog = blogService.findBlogByID(blog.getId());
 
-        targetBlog.setTitle(blog.getTitle());
-        targetBlog.setContent(blog.getContent());
-        targetBlog.setCategories(blog.getCategories());
-
-        blogService.updateBlog(targetBlog);
+        Blog blog = getBlogFromModel(blogModel);
+        blogService.updateBlog(blog);
 
         modelAndView.setViewName("redirect:/blog/" + blog.getId());
 
@@ -198,15 +161,50 @@ public class SpringMvcController {
     public void handleNotFound() {
     }
 
-    private List<Category> getCategoriesByIds(long[] categoryIds) {
-        List<Long> categoryIdList = new ArrayList<>();
+    private List<Category> getCategoriesByIds(List<Long> categoryIds) {
         List<Category> allCategoriesByIdList = null;
-        if (categoryIds != null) {
-            for (long categoryId : categoryIds) {
-                categoryIdList.add(categoryId);
-            }
-            allCategoriesByIdList = categoryService.findAllCategoriesByIdList(categoryIdList);
+        if (!categoryIds.isEmpty()) {
+            allCategoriesByIdList = categoryService.findAllCategoriesByIdList(categoryIds);
         }
         return allCategoriesByIdList;
+    }
+
+    private BlogModel getBlogModelFromBlog(Blog blog) {
+        BlogModel blogModel = new BlogModel();
+        blogModel.setId(blog.getId());
+        blogModel.setTitle(blog.getTitle());
+        blogModel.setAuthor(blog.getAuthor());
+        blogModel.setContent(blog.getContent());
+        return blogModel;
+    }
+
+    private BlogFilter getBlogFilterFromModel(BlogFilterModel blogFilterModel) {
+        BlogFilter blogFilter = new BlogFilter();
+
+        List<Category> allCategoriesByIdList = getCategoriesByIds(blogFilterModel.getCategoriesIds());
+        blogFilter.setCategories(allCategoriesByIdList);
+
+        DateRange dateRange = new DateRange();
+        dateRange.setFrom(blogFilterModel.getFrom());
+        dateRange.setTo(blogFilterModel.getTo());
+
+        blogFilter.setDateRange(dateRange);
+        return blogFilter;
+    }
+
+
+    private Blog getBlogFromModel(BlogModel blogModel) {
+        Blog blog = new Blog();
+        blog.setId(blogModel.getId());
+        List<Category> categories = getCategoriesByIds(blogModel.getCategoriesIds());
+        blog.setCategories(new HashSet<>(categories));
+
+        User user = new User(); // TODO : User
+        user.setId(1); // User ID : 1
+        blog.setAuthor(user);
+
+        blog.setTitle(blogModel.getTitle());
+        blog.setContent(blogModel.getContent());
+        return blog;
     }
 }

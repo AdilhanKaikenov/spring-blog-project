@@ -4,8 +4,8 @@
 
 <table border="1px" cellpadding="30%" align="center">
     <h2 align="center">Edit Blog</h2>
-    <%--@elvariable id="editBlog" type="com.epam.adok.core.entity.Blog"--%>
-    <form:form method="post" action="${pageContext.request.contextPath}/blog/edit" modelAttribute="editBlog">
+    <%--@elvariable id="blogModelEdit" type="com.epam.adok.web.model.BlogModel"--%>
+    <form:form method="post" action="${pageContext.request.contextPath}/blog/edit" modelAttribute="blogModelEdit">
         <form:hidden path="id"/>
         <tr>
             <td>Title :</td>
@@ -23,14 +23,14 @@
                     <%--@elvariable id="categoryList" type="java.util.List"--%>
                 <c:forEach items="${categoryList}" var="category">
                     <%--@elvariable id="category" type="com.epam.adok.core.entity.Category"--%>
-                    <%--<br><form:checkbox path="categories" value="${category}"/>${category.genre}--%>
-                    <br><input type="checkbox" name="categoryIds" value="${category.id}">${category.genre}
+                    <br><form:checkbox path="categoriesIds" value="${category.id}"/>${category.genre}
+                    <%--<br><input type="checkbox" name="categoryIds" value="${category.id}">${category.genre}--%>
                 </c:forEach>
             </td>
         </tr>
         <td colspan="2" align="center">
             <button type="submit">Update Blog</button> |
-            <a href="${pageContext.request.contextPath}/blog/${editBlog.id}">Back</a>
+            <a href="${pageContext.request.contextPath}/blog/${blogModelEdit.id}">Back</a>
         </td>
     </form:form>
 </table>

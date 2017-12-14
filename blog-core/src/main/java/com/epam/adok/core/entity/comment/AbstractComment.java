@@ -17,7 +17,7 @@ import java.util.Date;
 public abstract class AbstractComment extends AbstractBaseEntity {
 
     @OneToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id")
     private User user;
 
     @Column(name = "text")

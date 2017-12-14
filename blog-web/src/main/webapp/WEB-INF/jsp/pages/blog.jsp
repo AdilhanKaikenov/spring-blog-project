@@ -23,10 +23,11 @@
 </c:if>
 <div>
     <table width="100%">
-        <%--@elvariable id="comment" type="com.epam.adok.core.entity.comment.BlogComment"--%>
+        <%--@elvariable id="blogCommentModel" type="com.epam.adok.web.model.BlogCommentModel"--%>
         <form:form method="post" action="${pageContext.request.contextPath}/blog/comment/submit"
-                   modelAttribute="comment">
-            <input type="hidden" name="blogId" value="${blog.id}"/>
+                   modelAttribute="blogCommentModel">
+            <form:hidden path="blogId"/>
+            <form:hidden path="userId"/>
             <tr>
                 <td>
                     <form:textarea path="text"/>

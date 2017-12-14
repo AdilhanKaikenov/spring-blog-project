@@ -4,13 +4,13 @@
 
 <table align="center">
     <tr>
-        <%--@elvariable id="filter" type="com.epam.adok.core.dao.impl.blog.BlogFilter"--%>
-        <form:form method="post" action="${pageContext.request.contextPath}/blog/filter" modelAttribute="filter">
+        <%--@elvariable id="blogFilterModel" type="com.epam.adok.web.model.BlogFilterModel"--%>
+        <form:form method="post" action="${pageContext.request.contextPath}/blog/filter" modelAttribute="blogFilterModel">
             <td>
-                <form:input type="date" path="dateRange.from"/>
+                <form:input type="date" path="from"/>
             </td>
             <td>
-                <form:input type="date" path="dateRange.to"/>
+                <form:input type="date" path="to"/>
             </td>
             <td>
                     <%--@elvariable id="categoryList" type="java.util.List"--%>
@@ -18,8 +18,8 @@
 
                 <c:forEach items="${categoryList}" var="category">
                     <%--@elvariable id="category" type="com.epam.adok.core.entity.Category"--%>
-                    <%--<br><form:checkbox path="categories" value="${category}"/>${category.genre}--%>
-                    <br><input type="checkbox" name="categoryIds" value="${category.id}">${category.genre}
+                    <br><form:checkbox path="categoriesIds" value="${category.id}"/>${category.genre}
+                    <%--<br><input type="checkbox" name="categoryIds" value="${category.id}">${category.genre}--%>
                 </c:forEach>
             </td>
             <td>
