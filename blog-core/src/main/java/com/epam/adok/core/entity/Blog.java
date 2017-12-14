@@ -20,7 +20,7 @@ public class Blog extends UniqueIdEntity {
     @Column(name = "content")
     private String content;
 
-    @OneToOne(cascade = CascadeType.MERGE)
+    @OneToOne
     @JoinColumn(name = "user_id")
     private User author;
 
