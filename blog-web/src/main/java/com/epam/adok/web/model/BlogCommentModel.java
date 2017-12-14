@@ -3,7 +3,9 @@ package com.epam.adok.web.model;
 public class BlogCommentModel {
 
     private long blogId;
+
     private long userId;
+
     private String text;
 
     public long getBlogId() {

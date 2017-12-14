@@ -18,8 +18,6 @@
         <tr>
             <td>Categories :</td>
             <td>
-                <c:forEach items="${categoryList}" begin="0" end="${categoryList.size()}" var="category"/>
-
                     <%--@elvariable id="categoryList" type="java.util.List"--%>
                 <c:forEach items="${categoryList}" var="category">
                     <%--@elvariable id="category" type="com.epam.adok.core.entity.Category"--%>

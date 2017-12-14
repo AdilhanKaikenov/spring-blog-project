@@ -14,8 +14,6 @@
             </td>
             <td>
                     <%--@elvariable id="categoryList" type="java.util.List"--%>
-                    <%--<form:checkboxes path="categories" items="${categoryList}" />--%>
-
                 <c:forEach items="${categoryList}" var="category">
                     <%--@elvariable id="category" type="com.epam.adok.core.entity.Category"--%>
                     <br><form:checkbox path="categoriesIds" value="${category.id}"/>${category.genre}
