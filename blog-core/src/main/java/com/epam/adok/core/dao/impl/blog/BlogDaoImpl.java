@@ -20,7 +20,7 @@ public class BlogDaoImpl extends GenericDao<Blog> implements BlogDao {
     private static final Logger log = LoggerFactory.getLogger(BlogDaoImpl.class);
 
     @Override
-    public Blog read(int id) {
+    public Blog read(long id) {
         Query query = getEntityManager().createNamedQuery("Blog.readById");
         query.setParameter("id", id);
         return (Blog) query.getSingleResult();

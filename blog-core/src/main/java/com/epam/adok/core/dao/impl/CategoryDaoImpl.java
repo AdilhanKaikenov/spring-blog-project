@@ -11,7 +11,7 @@ import java.util.List;
 public class CategoryDaoImpl extends GenericDao<Category> implements CategoryDao {
 
     @Override
-    public Category read(int id) {
+    public Category read(long id) {
         Query query = getEntityManager().createNamedQuery("Category.readById");
         query.setParameter("id", id);
         return (Category) query.getSingleResult();
@@ -23,7 +23,7 @@ public class CategoryDaoImpl extends GenericDao<Category> implements CategoryDao
     }
 
     @Override
-    public List<Category> readByIdList(List<Integer> ids) {
+    public List<Category> readByIdList(List<Long> ids) {
         Query query = getEntityManager().createNamedQuery("Category.readByIdList");
         query.setParameter("idList", ids);
         return  query.getResultList();

@@ -12,7 +12,7 @@ import java.util.List;
 public class CommentDaoImpl<T extends AbstractComment> extends GenericDao<T> implements CommentDao<T> {
 
     @Override
-    public T read(int id) {
+    public T read(long id) {
         Query query = getEntityManager().createNamedQuery("AbstractComment.readById");
         query.setParameter("id", id);
         return (T) query.getSingleResult();
@@ -24,14 +24,14 @@ public class CommentDaoImpl<T extends AbstractComment> extends GenericDao<T> imp
     }
 
     @Override
-    public List<BlogComment> readAllByBlogId(int id) {
+    public List<BlogComment> readAllByBlogId(long id) {
         Query query = getEntityManager().createNamedQuery("BlogComment.readAllByBlogId");
         query.setParameter("id", id);
         return query.getResultList();
     }
 
     @Override
-    public void removeAllByBlogId(int id) {
+    public void removeAllByBlogId(long id) {
         Query query = getEntityManager().createNamedQuery("BlogComment.deleteAllBlogId");
         query.setParameter("id", id);
         query.executeUpdate();

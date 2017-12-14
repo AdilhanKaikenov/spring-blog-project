@@ -8,28 +8,28 @@ import java.io.Serializable;
 public class BlogCategoryID implements Serializable {
 
     @Column(name = "blog_id")
-    private int blogID;
+    private long blogID;
 
     @Column(name = "category_id")
-    private int categoryID;
+    private long categoryID;
 
-    public int getBlogID() {
+    public long getBlogID() {
         return blogID;
     }
 
-    public void setBlogID(int blogID) {
+    public void setBlogID(long blogID) {
         this.blogID = blogID;
     }
 
-    public int getCategoryID() {
+    public long getCategoryID() {
         return categoryID;
     }
 
-    public void setCategoryID(int categoryID) {
+    public void setCategoryID(long categoryID) {
         this.categoryID = categoryID;
     }
 
-    public BlogCategoryID(int blogID, int categoryID) {
+    public BlogCategoryID(long blogID, long categoryID) {
         this.blogID = blogID;
         this.categoryID = categoryID;
     }
@@ -50,8 +50,8 @@ public class BlogCategoryID implements Serializable {
 
     @Override
     public int hashCode() {
-        int result = blogID;
-        result = 31 * result + categoryID;
+        int result = (int) (blogID ^ (blogID >>> 32));
+        result = 31 * result + (int) (categoryID ^ (categoryID >>> 32));
         return result;
     }
 }

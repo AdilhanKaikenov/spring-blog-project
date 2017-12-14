@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface CategoryDao extends Dao<Category> {
 
-    List<Category> readByIdList(List<Integer> ids);
+    List<Category> readByIdList(List<Long> ids);
 
 }

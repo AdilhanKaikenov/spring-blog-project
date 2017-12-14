@@ -7,8 +7,8 @@ import java.util.List;
 
 public interface CommentDao<T extends AbstractComment> extends Dao<T> {
 
-    List<BlogComment> readAllByBlogId(int id);
+    List<BlogComment> readAllByBlogId(long id);
 
-    void removeAllByBlogId(int id);
+    void removeAllByBlogId(long id);
 
 }

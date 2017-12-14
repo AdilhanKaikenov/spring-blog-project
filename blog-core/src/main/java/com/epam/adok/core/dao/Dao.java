@@ -8,7 +8,7 @@ public interface Dao<T extends AbstractBaseEntity> {
 
     void save(T t);
 
-    T read(int id);
+    T read(long id);
 
     void update(T t);
 

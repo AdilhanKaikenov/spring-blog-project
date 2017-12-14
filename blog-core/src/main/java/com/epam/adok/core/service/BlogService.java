@@ -23,7 +23,7 @@ public class BlogService {
         blogDao.save(blog);
     }
 
-    public Blog findBlogByID(int id) {
+    public Blog findBlogByID(long id) {
         return blogDao.read(id);
     }
 
@@ -32,7 +32,7 @@ public class BlogService {
     }
 
     @Transactional
-    public void removeBlogByID(int id) {
+    public void removeBlogByID(long id) {
 
         blogCommentService.removeAllBlogCommentsByBlogId(id);
 

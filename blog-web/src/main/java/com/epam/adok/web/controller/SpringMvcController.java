@@ -52,7 +52,7 @@ public class SpringMvcController {
     }
 
     @RequestMapping(value = "/blog/{id}", method = RequestMethod.GET)
-    public ModelAndView blog(@PathVariable("id") int id) {
+    public ModelAndView blog(@PathVariable("id") long id) {
 
         Blog blog = blogService.findBlogByID(id);
 
@@ -94,7 +94,7 @@ public class SpringMvcController {
 
     @RequestMapping(value = "/blog/filter", method = RequestMethod.POST)
     public ModelAndView filter(@ModelAttribute("filter") BlogFilter filter,
-                               @Nullable @RequestParam("categoryIds") int[] categoryIds,
+                               @Nullable @RequestParam("categoryIds") long[] categoryIds,
                                ModelAndView modelAndView) throws DateParsingException {
 
         List<Category> allCategoriesByIdList = getCategoriesByIds(categoryIds);
@@ -119,7 +119,7 @@ public class SpringMvcController {
     @RequestMapping(value = "/blog/create", method = RequestMethod.POST)
     public ModelAndView create(
             @ModelAttribute("newBlog") Blog blog,
-            @RequestParam("categoryIds") int[] categoryIds,
+            @RequestParam("categoryIds") long[] categoryIds,
             ModelAndView modelAndView) {
 
         List<Category> categories = getCategoriesByIds(categoryIds);
@@ -143,7 +143,7 @@ public class SpringMvcController {
             @PathVariable("id") String sourceId,
             ModelAndView modelAndView) {
 
-        int id = Integer.parseInt(sourceId);
+        long id = Long.parseLong(sourceId);
 
         blogService.removeBlogByID(id);
 
@@ -157,7 +157,7 @@ public class SpringMvcController {
             @PathVariable("id") String sourceId,
             ModelAndView modelAndView) {
 
-        int id = Integer.parseInt(sourceId);
+        long id = Long.parseLong(sourceId);
 
         Blog blog = blogService.findBlogByID(id);
 
@@ -171,7 +171,7 @@ public class SpringMvcController {
     @RequestMapping(value = "/blog/edit", method = RequestMethod.POST)
     public ModelAndView edit(
             @ModelAttribute("editBlog") Blog blog,
-            @RequestParam("categoryIds") int[] categoryIds,
+            @RequestParam("categoryIds") long[] categoryIds,
             ModelAndView modelAndView) {
         List<Category> categories = getCategoriesByIds(categoryIds);
         blog.setCategories(new HashSet<>(categories));
@@ -198,11 +198,11 @@ public class SpringMvcController {
     public void handleNotFound() {
     }
 
-    private List<Category> getCategoriesByIds(int[] categoryIds) {
-        List<Integer> categoryIdList = new ArrayList<>();
+    private List<Category> getCategoriesByIds(long[] categoryIds) {
+        List<Long> categoryIdList = new ArrayList<>();
         List<Category> allCategoriesByIdList = null;
         if (categoryIds != null) {
-            for (int categoryId : categoryIds) {
+            for (long categoryId : categoryIds) {
                 categoryIdList.add(categoryId);
             }
             allCategoriesByIdList = categoryService.findAllCategoriesByIdList(categoryIdList);

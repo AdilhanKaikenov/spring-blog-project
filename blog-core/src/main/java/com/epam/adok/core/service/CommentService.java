@@ -14,7 +14,7 @@ public class CommentService<T extends AbstractComment> {
     @Autowired
     private CommentDao<T> commentDao;
 
-    public T findCommentByID(int id) {
+    public T findCommentByID(long id) {
         return commentDao.read(id);
     }
 
@@ -22,11 +22,11 @@ public class CommentService<T extends AbstractComment> {
         commentDao.save(comment);
     }
 
-    public List<BlogComment> findAllBlogCommentByBlogId(int blogID) {
+    public List<BlogComment> findAllBlogCommentByBlogId(long blogID) {
         return commentDao.readAllByBlogId(blogID);
     }
 
-    public void removeAllBlogCommentsByBlogId(int blogId) {
+    public void removeAllBlogCommentsByBlogId(long blogId) {
         commentDao.removeAllByBlogId(blogId);
     }
 }

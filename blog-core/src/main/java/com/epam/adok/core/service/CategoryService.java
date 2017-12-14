@@ -13,7 +13,7 @@ public class CategoryService {
     @Autowired
     private CategoryDao categoryDao;
 
-    public Category findCategoryByID(int id) {
+    public Category findCategoryByID(long id) {
         return categoryDao.read(id);
     }
 
@@ -21,7 +21,7 @@ public class CategoryService {
         return categoryDao.readAll();
     }
 
-    public List<Category> findAllCategoriesByIdList(List<Integer> ids) {
+    public List<Category> findAllCategoriesByIdList(List<Long> ids) {
         return categoryDao.readByIdList(ids);
     }
 }
