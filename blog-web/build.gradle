@@ -42,4 +42,10 @@ cargo {
     local {
         homeDir = file('C:\\apache-tomcat-8.5.23')
     }
+
+    remote {
+        hostname = 'localhost'
+        username = 'admin'
+        password = 'admin'
+    }
 }
