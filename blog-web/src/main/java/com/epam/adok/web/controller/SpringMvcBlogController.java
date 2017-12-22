@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.persistence.NoResultException;
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.HashSet;
 import java.util.List;
@@ -59,8 +58,7 @@ public class SpringMvcBlogController {
 
     @RequestMapping(value = "/blog/{id}", method = RequestMethod.GET)
     public ModelAndView blog(@PathVariable("id") long id,
-                             ModelAndView modelAndView,
-                             HttpServletRequest request) {
+                             ModelAndView modelAndView) {
 
         Blog blog = blogService.findBlogByID(id);
 
@@ -104,8 +102,8 @@ public class SpringMvcBlogController {
 
     @RequestMapping(value = "/blog/create", method = RequestMethod.POST)
     public ModelAndView create(@Valid @ModelAttribute("blogModelCreate") BlogModel blogModel,
-            BindingResult result,
-            ModelAndView modelAndView) {
+                               BindingResult result,
+                               ModelAndView modelAndView) {
 
         if (result.hasErrors()) {
             modelAndView.addAllObjects(result.getModel());
@@ -122,9 +120,8 @@ public class SpringMvcBlogController {
     }
 
     @RequestMapping(value = "/blog/{id}/delete", method = RequestMethod.GET)
-    public ModelAndView delete(
-            @PathVariable("id") String sourceId,
-            ModelAndView modelAndView) {
+    public ModelAndView delete(@PathVariable("id") String sourceId,
+                               ModelAndView modelAndView) {
 
         long id = Long.parseLong(sourceId);
         blogService.removeBlogByID(id);
@@ -135,9 +132,8 @@ public class SpringMvcBlogController {
     }
 
     @RequestMapping(value = "/blog/{id}/edit", method = RequestMethod.GET)
-    public ModelAndView getBlogEditPage(
-            @PathVariable("id") String sourceId,
-            ModelAndView modelAndView) {
+    public ModelAndView getBlogEditPage(@PathVariable("id") String sourceId,
+                                        ModelAndView modelAndView) {
 
         long id = Long.parseLong(sourceId);
 
