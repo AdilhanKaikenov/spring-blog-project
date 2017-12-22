@@ -9,16 +9,17 @@
         <tr>
             <td>Title :</td>
             <td><form:input path="title"/></td>
+            <td><form:errors path="title"/></td>
         </tr>
         <tr>
             <td>Content :</td>
             <td><form:textarea path="content"/></td>
+            <td><form:errors path="content"/></td>
         </tr>
         <tr>
             <td>Categories :</td>
             <td>
                 <c:forEach items="${categoryList}" begin="0" end="${categoryList.size()}" var="category"/>
-
                     <%--@elvariable id="categoryList" type="java.util.List"--%>
                 <c:forEach items="${categoryList}" var="category">
                     <%--@elvariable id="category" type="com.epam.adok.core.entity.Category"--%>
@@ -26,6 +27,7 @@
                     <%--<br><input type="checkbox" name="categoryIds" value="${category.id}">${category.genre}--%>
                 </c:forEach>
             </td>
+            <td><form:errors path="categoriesIds"/></td>
         </tr>
         <td colspan="2" align="center">
             <button type="submit">Create New Blog</button> |

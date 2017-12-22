@@ -8,6 +8,9 @@
 <a href="${pageContext.request.contextPath}/blog/${blog.id}/edit">Edit</a> |
 <a href="${pageContext.request.contextPath}/blog/${blog.id}/delete">Delete</a> |
 <a href="${pageContext.request.contextPath}/blog">Back</a>
+
+
+<form:errors path="text"/>
 <%--@elvariable id="blogComments" type="java.util.List"--%>
 <c:if test="${not empty blogComments}">
     <%--@elvariable id="blogComment" type="com.epam.adok.core.entity.comment.BlogComment"--%>
@@ -31,6 +34,9 @@
             <tr>
                 <td>
                     <form:textarea path="text"/>
+                </td>
+                <td>
+                    <form:errors path="text"/>
                 </td>
             </tr>
             <tr>

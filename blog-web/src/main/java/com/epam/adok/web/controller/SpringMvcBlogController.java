@@ -19,10 +19,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.persistence.NoResultException;
+import javax.validation.Valid;
 import java.util.HashSet;
 import java.util.List;
 
@@ -53,7 +55,8 @@ public class SpringMvcBlogController {
     }
 
     @RequestMapping(value = "/blog/{id}", method = RequestMethod.GET)
-    public ModelAndView blog(@PathVariable("id") long id) {
+    public ModelAndView blog(@PathVariable("id") long id,
+                             ModelAndView modelAndView) {
 
         Blog blog = blogService.findBlogByID(id);
 
@@ -63,17 +66,16 @@ public class SpringMvcBlogController {
             throw new NotFoundException();
         }
 
-        ModelAndView model = new ModelAndView();
-        model.addObject("blog", blog);
-        model.addObject("blogComments", allBlogComments);
+        modelAndView.addObject("blog", blog);
+        modelAndView.addObject("blogComments", allBlogComments);
 
         BlogCommentModel blogCommentModel = new BlogCommentModel();
         blogCommentModel.setBlogId(blog.getId());
-        model.addObject("blogCommentModel", blogCommentModel);
+        modelAndView.addObject("blogCommentModel", blogCommentModel);
 
-        model.setViewName("blog");
+        modelAndView.setViewName("blog");
 
-        return model;
+        return modelAndView;
     }
 
     @RequestMapping(value = "/blog/filter", method = RequestMethod.POST)
@@ -97,9 +99,15 @@ public class SpringMvcBlogController {
     }
 
     @RequestMapping(value = "/blog/create", method = RequestMethod.POST)
-    public ModelAndView create(
-            @ModelAttribute("blogModelCreate") BlogModel blogModel,
+    public ModelAndView create(@Valid @ModelAttribute("blogModelCreate") BlogModel blogModel,
+            BindingResult result,
             ModelAndView modelAndView) {
+
+        if (result.hasErrors()) {
+            modelAndView.addAllObjects(result.getModel());
+            modelAndView.setViewName("create-new-blog");
+            return modelAndView;
+        }
 
         Blog blog = getBlogFromModel(blogModel);
         blogService.createBlog(blog);
@@ -139,8 +147,7 @@ public class SpringMvcBlogController {
     }
 
     @RequestMapping(value = "/blog/edit", method = RequestMethod.POST)
-    public ModelAndView edit(
-            @ModelAttribute("blogModelEdit") BlogModel blogModel,
+    public ModelAndView edit(@ModelAttribute("blogModelEdit") BlogModel blogModel,
             ModelAndView modelAndView) {
 
         Blog blog = getBlogFromModel(blogModel);
