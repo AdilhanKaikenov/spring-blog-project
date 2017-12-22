@@ -42,6 +42,13 @@ public class BlogDaoImpl extends GenericDao<Blog> implements BlogDao {
     public Blog readByTitle(String title) {
         Query query = getEntityManager().createNamedQuery("Blog.readByTitle");
         query.setParameter("title", title);
-        return (Blog) query.getSingleResult();
+
+        List resultList = query.getResultList();
+
+        if (resultList.isEmpty()) {
+            return null;
+        }
+
+        return (Blog) resultList.get(0);
     }
 }
