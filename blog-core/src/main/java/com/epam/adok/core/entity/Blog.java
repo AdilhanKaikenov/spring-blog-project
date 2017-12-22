@@ -2,7 +2,6 @@ package com.epam.adok.core.entity;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -28,7 +27,7 @@ public class Blog extends UniqueIdEntity {
     @JoinTable(name = "blog_category_assignment",
             joinColumns = {@JoinColumn(name = "blog_id")},
             inverseJoinColumns = {@JoinColumn(name = "category_id")})
-    private Set<Category> categories = new HashSet<>();
+    private Set<Category> categories;
 
     @Column(name = "publication_date")
     private Date publicationDate;
