@@ -9,4 +9,6 @@ public interface BlogDao extends Dao<Blog> {
 
     List<Blog> readByParameters(BlogFilter filter);
 
+    Blog readByTitle(String title);
+
 }

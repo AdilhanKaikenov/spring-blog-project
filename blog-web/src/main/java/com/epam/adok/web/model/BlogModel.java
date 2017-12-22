@@ -1,6 +1,7 @@
 package com.epam.adok.web.model;
 
 import com.epam.adok.core.entity.User;
+import com.epam.adok.web.annotation.UniqueBlogTitle;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -13,6 +14,7 @@ public class BlogModel {
 
     @NotNull(message = "Should not be null")
     @Size(min = 4, max = 30, message = "Should be between 4 to 30 characters")
+    @UniqueBlogTitle
     private String title;
 
     @NotNull(message = "Should not be null")

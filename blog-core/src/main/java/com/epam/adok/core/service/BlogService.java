@@ -48,4 +48,8 @@ public class BlogService {
     public List<Blog> findAllBlogsByParameters(BlogFilter filter) {
         return blogDao.readByParameters(filter);
     }
+
+    public Blog findBlogByTitle(String title) {
+        return blogDao.readByTitle(title);
+    }
 }

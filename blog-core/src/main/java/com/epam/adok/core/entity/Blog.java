@@ -7,6 +7,7 @@ import java.util.Set;
 @Entity
 @NamedQueries({
         @NamedQuery(name = "Blog.readById", query = "SELECT blog FROM Blog blog WHERE blog.id = :id"),
+        @NamedQuery(name = "Blog.readByTitle", query = "SELECT blog FROM Blog blog WHERE blog.title = :title"),
         @NamedQuery(name = "Blog.readAll", query = "SELECT blog FROM Blog blog")
 })
 @Table(name = "blog")

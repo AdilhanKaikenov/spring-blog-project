@@ -37,4 +37,11 @@ public class BlogDaoImpl extends GenericDao<Blog> implements BlogDao {
         JPAQuery jpaQuery = blogQueryBuilder.createJPAQuery();
         return jpaQuery.list(blog);
     }
+
+    @Override
+    public Blog readByTitle(String title) {
+        Query query = getEntityManager().createNamedQuery("Blog.readByTitle");
+        query.setParameter("title", title);
+        return (Blog) query.getSingleResult();
+    }
 }
