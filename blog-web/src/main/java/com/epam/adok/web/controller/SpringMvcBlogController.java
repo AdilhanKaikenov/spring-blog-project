@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.persistence.NoResultException;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.HashSet;
 import java.util.List;
@@ -56,7 +57,8 @@ public class SpringMvcBlogController {
 
     @RequestMapping(value = "/blog/{id}", method = RequestMethod.GET)
     public ModelAndView blog(@PathVariable("id") long id,
-                             ModelAndView modelAndView) {
+                             ModelAndView modelAndView,
+                             HttpServletRequest request) {
 
         Blog blog = blogService.findBlogByID(id);
 

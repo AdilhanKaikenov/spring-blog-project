@@ -3,7 +3,6 @@ package com.epam.adok.web.controller;
 import com.epam.adok.core.entity.Blog;
 import com.epam.adok.core.entity.User;
 import com.epam.adok.core.entity.comment.BlogComment;
-import com.epam.adok.core.service.BlogService;
 import com.epam.adok.core.service.CommentService;
 import com.epam.adok.web.model.BlogCommentModel;
 import org.slf4j.Logger;
@@ -11,15 +10,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 public class SpringMvcCommentController {
@@ -29,38 +30,33 @@ public class SpringMvcCommentController {
     @Autowired
     private CommentService<BlogComment> blogCommentService;
 
-    @Autowired
-    private BlogService blogService;
-
     @RequestMapping(value = "/blog/comment/submit", method = RequestMethod.POST)
-    public ModelAndView commentSubmit(@Valid @ModelAttribute("blogCommentModel") BlogCommentModel blogCommentModel,
+    public RedirectView commentSubmit(@Valid @ModelAttribute("blogCommentModel") BlogCommentModel blogCommentModel,
                                       BindingResult result,
-                                      ModelAndView modelAndView) {
+                                      RedirectAttributes redirectAttrs) {
+
+        RedirectView redirectView = new RedirectView();
+        redirectView.setUrl("/blog/" + blogCommentModel.getBlogId());
+        redirectView.setContextRelative(true);
 
         if (result.hasErrors()) {
-            Map<String, Object> model = result.getModel();
 
-            modelAndView.addAllObjects(model);
+            List<ObjectError> errors = result.getAllErrors();
+            List<String> messages = new ArrayList<>();
 
-            long blogId = blogCommentModel.getBlogId();
-            // TODO :
-            Blog blog = blogService.findBlogByID(blogId);
-            List<BlogComment> allBlogCommentByBlogId = blogCommentService.findAllBlogCommentByBlogId(blogId);
+            for (ObjectError error : errors) {
+                messages.add(error.getDefaultMessage());
+            }
 
-            modelAndView.addObject("blog", blog);
-            modelAndView.addObject("blogComments", allBlogCommentByBlogId);
+            redirectAttrs.addFlashAttribute("messages", messages);
 
-            modelAndView.setViewName("blog");
-
-            return modelAndView;
+            return redirectView;
         }
 
         BlogComment blogComment = getBlogCommentFromModel(blogCommentModel);
         blogCommentService.submitComment(blogComment);
 
-        modelAndView.setViewName("redirect:/blog/" + blogCommentModel.getBlogId());
-
-        return modelAndView;
+        return redirectView;
     }
 
     private BlogComment getBlogCommentFromModel(BlogCommentModel blogCommentModel) {

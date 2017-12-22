@@ -36,7 +36,12 @@
                     <form:textarea path="text"/>
                 </td>
                 <td>
-                    <form:errors path="text"/>
+                    <%--@elvariable id="messages" type="java.util.List"--%>
+                    <c:if test="${not empty messages}">
+                        <c:forEach items="${messages}" var="error">
+                            <br>${error}
+                        </c:forEach>
+                    </c:if>
                 </td>
             </tr>
             <tr>
