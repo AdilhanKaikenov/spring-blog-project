@@ -4,7 +4,7 @@
 
 <table border="1px" cellpadding="30%" align="center">
     <h2 align="center">Create New Blog</h2>
-    <%--@elvariable id="blogModelCreate" type="com.epam.adok.web.model.BlogModel"--%>
+    <%--@elvariable id="blogModelCreate" type="com.epam.adok.web.model.blog.BlogCreateModel"--%>
     <form:form method="post" action="${pageContext.request.contextPath}/blog/create" modelAttribute="blogModelCreate">
         <tr>
             <td>Title :</td>

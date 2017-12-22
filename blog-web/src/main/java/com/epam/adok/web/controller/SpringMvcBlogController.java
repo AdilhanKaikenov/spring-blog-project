@@ -34,6 +34,8 @@ public class SpringMvcBlogController {
 
     private static final Logger log = LoggerFactory.getLogger(SpringMvcBlogController.class);
 
+    private static final int ONE = 1;
+
     @Autowired
     private BlogService blogService;
 
@@ -149,8 +151,15 @@ public class SpringMvcBlogController {
     }
 
     @RequestMapping(value = "/blog/edit", method = RequestMethod.POST)
-    public ModelAndView edit(@ModelAttribute("blogModelEdit") BlogModel blogModel,
-            ModelAndView modelAndView) {
+    public ModelAndView edit(@Valid @ModelAttribute("blogModelEdit") BlogModel blogModel,
+                             BindingResult result,
+                             ModelAndView modelAndView) {
+
+        if (result.getAllErrors().size() > ONE) { // ONE - always a title field (should be ignored)
+            modelAndView.addAllObjects(result.getModel());
+            modelAndView.setViewName("edit");
+            return modelAndView;
+        }
 
         Blog blog = getBlogFromModel(blogModel);
         blogService.updateBlog(blog);

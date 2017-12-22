@@ -4,16 +4,18 @@
 
 <table border="1px" cellpadding="30%" align="center">
     <h2 align="center">Edit Blog</h2>
-    <%--@elvariable id="blogModelEdit" type="com.epam.adok.web.model.BlogModel"--%>
+    <%--@elvariable id="blogModelEdit" type="com.epam.adok.web.model.blog.BlogCreateModel"--%>
     <form:form method="post" action="${pageContext.request.contextPath}/blog/edit" modelAttribute="blogModelEdit">
         <form:hidden path="id"/>
         <tr>
             <td>Title :</td>
             <td><form:input path="title"/></td>
+            <%--<td><form:errors path="title"/></td>--%>
         </tr>
         <tr>
             <td>Content :</td>
             <td><form:textarea path="content"/></td>
+            <td><form:errors path="content"/></td>
         </tr>
         <tr>
             <td>Categories :</td>
@@ -25,6 +27,7 @@
                     <%--<br><input type="checkbox" name="categoryIds" value="${category.id}">${category.genre}--%>
                 </c:forEach>
             </td>
+            <td><form:errors path="categoriesIds"/></td>
         </tr>
         <td colspan="2" align="center">
             <button type="submit">Update Blog</button> |
