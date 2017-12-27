@@ -31,9 +31,9 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-public class SpringMvcBlogController {
+public class BlogController {
 
-    private static final Logger log = LoggerFactory.getLogger(SpringMvcBlogController.class);
+    private static final Logger log = LoggerFactory.getLogger(BlogController.class);
 
     private static final int ONE = 1;
 
@@ -76,7 +76,6 @@ public class SpringMvcBlogController {
         modelAndView.addObject("blogComments", allBlogComments);
 
         BlogCommentModel blogCommentModel = new BlogCommentModel();
-        blogCommentModel.setBlogId(blog.getId());
 
         Map<String, Object> objectMap = model.asMap();
         String commentText = (String) objectMap.get("text");

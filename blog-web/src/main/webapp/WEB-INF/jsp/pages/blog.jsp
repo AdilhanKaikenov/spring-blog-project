@@ -27,9 +27,8 @@
 <div>
     <table width="100%">
         <%--@elvariable id="blogCommentModel" type="com.epam.adok.web.model.BlogCommentModel"--%>
-        <form:form method="post" action="${pageContext.request.contextPath}/blog/comment/submit"
+        <form:form method="post" action="${pageContext.request.contextPath}/blog/${blog.id}/comment"
                    modelAttribute="blogCommentModel">
-            <form:hidden path="blogId"/>
             <form:hidden path="userId"/>
             <tr>
                 <td>

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -23,21 +24,22 @@ import java.util.Date;
 import java.util.List;
 
 @Controller
-public class SpringMvcCommentController {
+public class CommentController {
 
-    private static final Logger log = LoggerFactory.getLogger(SpringMvcCommentController.class);
+    private static final Logger log = LoggerFactory.getLogger(CommentController.class);
 
     @Autowired
     private CommentService<BlogComment> blogCommentService;
 
-    @RequestMapping(value = "/blog/comment/submit", method = RequestMethod.POST)
-    public RedirectView commentSubmit(@Valid @ModelAttribute("blogCommentModel") BlogCommentModel blogCommentModel,
+    @RequestMapping(value = "/blog/{blogId}/comment", method = RequestMethod.POST)
+
+    public RedirectView commentSubmit(@PathVariable("blogId") long blogId,
+                                      @Valid @ModelAttribute("blogCommentModel") BlogCommentModel blogCommentModel,
                                       BindingResult result,
                                       RedirectAttributes redirectAttrs) {
 
-        RedirectView redirectView = new RedirectView();
-        redirectView.setUrl("/blog/" + blogCommentModel.getBlogId());
-        redirectView.setContextRelative(true);
+        String url = "/blog/" + blogId;
+        RedirectView redirectView = new RedirectView(url, true, false);
 
         if (result.hasErrors()) {
 
@@ -54,16 +56,16 @@ public class SpringMvcCommentController {
             return redirectView;
         }
 
-        BlogComment blogComment = getBlogCommentFromModel(blogCommentModel);
+        BlogComment blogComment = getBlogCommentFromModel(blogCommentModel, blogId);
         blogCommentService.submitComment(blogComment);
 
         return redirectView;
     }
 
-    private BlogComment getBlogCommentFromModel(BlogCommentModel blogCommentModel) {
+    private BlogComment getBlogCommentFromModel(BlogCommentModel blogCommentModel, long blogId) {
         BlogComment blogComment = new BlogComment();
         Blog blog = new Blog();
-        blog.setId(blogCommentModel.getBlogId());
+        blog.setId(blogId);
         blogComment.setBlog(blog);
 
         User user = new User();
