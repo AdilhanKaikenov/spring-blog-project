@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -27,6 +28,7 @@ import javax.persistence.NoResultException;
 import javax.validation.Valid;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class SpringMvcBlogController {
@@ -58,7 +60,7 @@ public class SpringMvcBlogController {
 
     @RequestMapping(value = "/blog/{id}", method = RequestMethod.GET)
     public ModelAndView blog(@PathVariable("id") long id,
-                             ModelAndView modelAndView) {
+                             Model model) {
 
         Blog blog = blogService.findBlogByID(id);
 
@@ -68,11 +70,21 @@ public class SpringMvcBlogController {
             throw new NotFoundException();
         }
 
+        ModelAndView modelAndView = new ModelAndView();
+
         modelAndView.addObject("blog", blog);
         modelAndView.addObject("blogComments", allBlogComments);
 
         BlogCommentModel blogCommentModel = new BlogCommentModel();
         blogCommentModel.setBlogId(blog.getId());
+
+        Map<String, Object> objectMap = model.asMap();
+        String commentText = (String) objectMap.get("text");
+
+        if (commentText != null) {
+            blogCommentModel.setText(commentText);
+        }
+
         modelAndView.addObject("blogCommentModel", blogCommentModel);
 
         modelAndView.setViewName("blog");

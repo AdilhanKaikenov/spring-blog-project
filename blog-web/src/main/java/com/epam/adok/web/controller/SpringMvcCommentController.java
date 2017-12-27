@@ -49,6 +49,7 @@ public class SpringMvcCommentController {
             }
 
             redirectAttrs.addFlashAttribute("messages", messages);
+            redirectAttrs.addFlashAttribute("text", blogCommentModel.getText());
 
             return redirectView;
         }
