@@ -1,4 +1,4 @@
-package com.epam.adok.web.configuration;
+package com.epam.adok.core.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -18,8 +18,7 @@ import java.util.Properties;
 
 @Configuration
 @ComponentScans(value = {
-        @ComponentScan("com.epam.adok.core"),
-        @ComponentScan("com.epam.adok.web")
+        @ComponentScan("com.epam.adok.core")
 })
 @EnableTransactionManagement
 @EnableJpaRepositories("com.epam.adok.core.dao")

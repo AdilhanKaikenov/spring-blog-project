@@ -1,5 +1,6 @@
 package com.epam.adok.web.configuration;
 
+import com.epam.adok.core.configuration.RootApplicationContextConfiguration;
 import org.springframework.lang.Nullable;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
