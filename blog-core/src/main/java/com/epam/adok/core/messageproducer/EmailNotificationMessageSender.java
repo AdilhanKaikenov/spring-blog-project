@@ -40,24 +40,27 @@ public class EmailNotificationMessageSender {
             User blogAuthor = blog.getAuthor();
             String blogAuthorEmail = blogAuthor.getEmail();
 
-            String message = MessageFormat.format(
-                    "User {0} left a comment on your blog {1} at {2}",
+            String message = MessageFormat.format("User {0} left a comment on your blog {1} at {2}",
                     commentAuthor.getLogin(),
                     blog.getTitle(),
                     notification.getDate());
 
-            log.info("notification ID : {}", notification.getId());
-
-            SimpleMailMessage mailMessage = new SimpleMailMessage();
-            mailMessage.setTo(blogAuthorEmail);
-            mailMessage.setFrom("uvedomitel.blogov@bk.ru");
-            mailMessage.setSubject("Notification");
-            mailMessage.setText(message);
+            SimpleMailMessage mailMessage = buildMailMessage(
+                    "uvedomitel.blogov@bk.ru", blogAuthorEmail, "Notification", message);
 
             mailSender.send(mailMessage);
 
         } catch (InterruptedException e) {
             e.printStackTrace(); // TODO
         }
+    }
+
+    private SimpleMailMessage buildMailMessage(String from, String to, String Subject, String message) {
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setFrom(from);
+        mailMessage.setTo(to);
+        mailMessage.setSubject(Subject);
+        mailMessage.setText(message);
+        return mailMessage;
     }
 }
