@@ -37,14 +37,15 @@ public class CommentService<T extends AbstractComment> {
 
     @Transactional
     public void submitComment(T comment) {
+        log.info("Entering submitComment() method.");
         commentDao.save(comment);
         if (comment instanceof BlogComment) {
             Notification notification = createNotification((BlogComment) comment);
             notificationDao.save(notification);
             long notificationId = notification.getId();
-            log.info("notificationId {} : ", notificationId);
+            log.info("Notification saved. ID - {} : ", notificationId);
             messageSender.sendNotificationEmailMessage(notificationId);
-            log.info("BlogComment submitted & email sent{}");
+            log.info("End of submitComment() method.");
         }
     }
 
