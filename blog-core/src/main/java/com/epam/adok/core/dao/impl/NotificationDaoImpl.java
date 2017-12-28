@@ -16,6 +16,8 @@ public class NotificationDaoImpl extends GenericDao<Notification> implements Not
 
     @Override
     public Notification read(long id) {
-        return getEntityManager().find(Notification.class, id);
+        Query query = getEntityManager().createNamedQuery("Notification.readById");
+        query.setParameter("id", id);
+        return (Notification) query.getSingleResult();
     }
 }

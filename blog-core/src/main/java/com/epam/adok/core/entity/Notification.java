@@ -6,6 +6,7 @@ import java.util.Date;
 @Entity
 @Table(name = "notification")
 @NamedQueries({
+        @NamedQuery(name = "Notification.readById", query = "SELECT notification FROM Notification notification WHERE notification.id = :id"),
         @NamedQuery(name = "Notification.removeByCreatedOnBefore", query = "DELETE FROM Notification n WHERE n.date < :expiryDate"),
         @NamedQuery(name = "Notification.readAll", query = "SELECT notification FROM Notification notification")
 })
