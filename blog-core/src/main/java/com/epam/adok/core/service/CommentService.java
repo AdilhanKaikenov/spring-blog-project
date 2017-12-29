@@ -7,7 +7,7 @@ import com.epam.adok.core.entity.Notification;
 import com.epam.adok.core.entity.User;
 import com.epam.adok.core.entity.comment.AbstractComment;
 import com.epam.adok.core.entity.comment.BlogComment;
-import com.epam.adok.core.messageproducer.EmailNotificationMessageSender;
+import com.epam.adok.core.messagesender.EmailNotificationMessageSender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

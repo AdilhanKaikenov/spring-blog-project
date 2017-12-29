@@ -1,4 +1,4 @@
-package com.epam.adok.core.messageproducer;
+package com.epam.adok.core.messagesender;
 
 import com.epam.adok.core.entity.Blog;
 import com.epam.adok.core.entity.Notification;
