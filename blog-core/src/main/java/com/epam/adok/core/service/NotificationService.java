@@ -5,6 +5,8 @@ import com.epam.adok.core.entity.Notification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 @Service
 public class NotificationService {
 
@@ -13,5 +15,9 @@ public class NotificationService {
 
     public Notification readNotificationByID(long id) {
         return notificationDao.read(id);
+    }
+
+    public void deleteAllNotificationsByCreatedOnBefore(Date expiryDate) {
+        notificationDao.deleteByCreatedOnBefore(expiryDate);
     }
 }

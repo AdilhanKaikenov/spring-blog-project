@@ -5,6 +5,7 @@ import com.epam.adok.core.entity.Notification;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.Query;
+import java.util.Date;
 
 @Repository
 public class NotificationDaoImpl extends GenericDao<Notification> implements NotificationDao {
@@ -19,5 +20,12 @@ public class NotificationDaoImpl extends GenericDao<Notification> implements Not
         Query query = getEntityManager().createNamedQuery("Notification.readById");
         query.setParameter("id", id);
         return (Notification) query.getSingleResult();
+    }
+
+    @Override
+    public void deleteByCreatedOnBefore(Date expiryDate) {
+        Query query = getEntityManager().createNamedQuery("Notification.removeByCreatedOnBefore");
+        query.setParameter("expiryDate", expiryDate);
+        query.executeUpdate();
     }
 }
