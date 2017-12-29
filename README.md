@@ -6,6 +6,7 @@ Spring Project for practice.
 3. Bean validation & Custom validation
 4. Async method
 5. Task Execution and Scheduling
+6. RESTful Web Services
 * Java Persistence API (JPA):
 1. Object-Relational Mapping (ORM)
 2. QueryDSL
