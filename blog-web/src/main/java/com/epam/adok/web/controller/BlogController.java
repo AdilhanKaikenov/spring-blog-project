@@ -189,6 +189,13 @@ public class BlogController {
         return modelAndView;
     }
 
+    @ExceptionHandler({NumberFormatException.class})
+    public ModelAndView handleNumberFormatException() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("redirect:/blog");
+        return modelAndView;
+    }
+
     private List<Category> getCategoriesByIds(List<Long> categoryIds) {
         List<Category> allCategoriesByIdList = null;
         if (!categoryIds.isEmpty()) {
