@@ -3,6 +3,7 @@ package com.epam.adok.core.dao.impl;
 import com.epam.adok.core.dao.NotificationDao;
 import com.epam.adok.core.entity.Notification;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.Query;
 import java.util.Date;
@@ -22,6 +23,7 @@ public class NotificationDaoImpl extends GenericDao<Notification> implements Not
         return (Notification) query.getSingleResult();
     }
 
+    @Transactional
     @Override
     public void deleteByCreatedOnBefore(Date expiryDate) {
         Query query = getEntityManager().createNamedQuery("Notification.removeByCreatedOnBefore");
