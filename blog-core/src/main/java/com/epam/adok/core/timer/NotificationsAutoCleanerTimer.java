@@ -26,13 +26,11 @@ public class NotificationsAutoCleanerTimer {
 
     @Scheduled(fixedDelayString = "${one.day.in.milliseconds}")
     public void executeScheduledTask() {
-        log.info("Executed task on :: {}", new Date());
+        log.info("Executed scheduled task on :: {}", new Date());
 
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.WEEK_OF_MONTH, -numberOfWeeks);
         Date expiryDate = cal.getTime();
-
-        log.info("Expiry Date : {}", expiryDate);
 
         notificationService.deleteAllNotificationsByCreatedOnBefore(expiryDate);
     }
