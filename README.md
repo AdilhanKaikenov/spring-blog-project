@@ -1,5 +1,20 @@
 Spring Project for practice.
 
+* Spring Framework
+1. Java Configuration
+2. Spring MVC 
+3. Bean validation & Custom validation
+4. Async method
+5. Task Execution and Scheduling
+* Java Persistence API (JPA):
+1. Object-Relational Mapping (ORM)
+2. QueryDSL
+3. NamedQuery
+4. Inheritance - SINGLE_TABLE, JOINED
+* Gradle
+* JBoss (wildfly-10.1.0.Final)
+* Slf4j + Log4j
+
 Приложение - Блог:
 ------------------
 - Создать категорию
