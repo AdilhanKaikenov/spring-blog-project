@@ -17,7 +17,6 @@ import com.epam.adok.web.model.BlogModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.persistence.NoResultException;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.HashSet;
 import java.util.List;
@@ -181,9 +181,12 @@ public class BlogController {
         return categoryService.findAllCategories();
     }
 
-    @ResponseStatus(code = HttpStatus.NOT_FOUND, reason = "The result with this ID was not found.")
     @ExceptionHandler({NoResultException.class, NotFoundException.class})
-    public void handleNotFound() {
+    public ModelAndView handleNotFound(HttpServletRequest req) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("url", req.getRequestURI());
+        modelAndView.setViewName("no-result-error-page");
+        return modelAndView;
     }
 
     private List<Category> getCategoriesByIds(List<Long> categoryIds) {
