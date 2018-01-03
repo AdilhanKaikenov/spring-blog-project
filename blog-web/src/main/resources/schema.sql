@@ -72,5 +72,3 @@ ALTER TABLE `comment` ADD CONSTRAINT `comment_fk0` FOREIGN KEY (`blog_id`) REFER
 ALTER TABLE `comment` ADD CONSTRAINT `comment_fk1` FOREIGN KEY (`category_id`) REFERENCES `category`(`id`);
 ALTER TABLE `comment` ADD CONSTRAINT `comment_fk2` FOREIGN KEY (`parent_comment_id`) REFERENCES `comment`(`id`);
 ALTER TABLE `comment` ADD CONSTRAINT `comment_fk3` FOREIGN KEY (`user_id`) REFERENCES `user`(`id`);
-ALTER TABLE `notification` ADD CONSTRAINT `notification_fk0` FOREIGN KEY (`blog_id`) REFERENCES `blog`(`id`);
-ALTER TABLE `notification` ADD CONSTRAINT `notification_fk1` FOREIGN KEY (`user_id`) REFERENCES `user`(`id`);
