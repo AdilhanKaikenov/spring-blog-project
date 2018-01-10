@@ -20,6 +20,7 @@ subprojects {
         compile 'org.springframework:spring-webmvc:5.0.2.RELEASE'
         compile 'org.springframework.data:spring-data-jpa:2.0.2.RELEASE'
         compile 'org.springframework:spring-context-support:5.0.2.RELEASE'
+        testCompile 'org.springframework:spring-test:5.0.2.RELEASE'
 //        Validation
         compile 'org.hibernate:hibernate-validator:5.0.0.Final'
         compile 'javax.validation:validation-api:2.0.0.Final'
