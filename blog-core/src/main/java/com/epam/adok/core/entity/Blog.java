@@ -8,6 +8,7 @@ import java.util.Set;
 @NamedQueries({
         @NamedQuery(name = "Blog.readById", query = "SELECT blog FROM Blog blog WHERE blog.id = :id"),
         @NamedQuery(name = "Blog.readByTitle", query = "SELECT blog FROM Blog blog WHERE blog.title = :title"),
+        @NamedQuery(name = "Blog.readVOByTitle", query = "SELECT NEW com.epam.adok.core.vo.BlogTitleVO(blog.id, blog.title) FROM Blog blog WHERE blog.title = :title"),
         @NamedQuery(name = "Blog.readAll", query = "SELECT blog FROM Blog blog")
 })
 @Table(name = "blog")
