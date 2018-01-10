@@ -34,6 +34,17 @@ public class Blog extends UniqueIdEntity {
     @Column(name = "publication_date")
     private Date publicationDate;
 
+    public Blog() {
+    }
+
+    public Blog(String title, String content, User author, Set<Category> categories, Date publicationDate) {
+        this.title = title;
+        this.content = content;
+        this.author = author;
+        this.categories = categories;
+        this.publicationDate = publicationDate;
+    }
+
     public String getTitle() {
         return title;
     }

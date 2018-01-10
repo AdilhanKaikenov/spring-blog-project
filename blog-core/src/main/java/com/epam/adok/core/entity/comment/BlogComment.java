@@ -1,8 +1,10 @@
 package com.epam.adok.core.entity.comment;
 
 import com.epam.adok.core.entity.Blog;
+import com.epam.adok.core.entity.User;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @NamedQueries({
@@ -19,6 +21,15 @@ public class BlogComment extends AbstractComment {
     @OneToOne
     @JoinColumn(name="parent_comment_id")
     private BlogComment parentComment;
+
+    public BlogComment() {
+    }
+
+    public BlogComment(User user, String text, Date commentDate, Blog blog, BlogComment parentComment) {
+        super(user, text, commentDate);
+        this.blog = blog;
+        this.parentComment = parentComment;
+    }
 
     public Blog getBlog() {
         return blog;

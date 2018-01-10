@@ -22,6 +22,16 @@ public class User extends AbstractBaseEntity {
     @Column(name = "date_of_registration")
     private Date registrationDate;
 
+    public User() {
+    }
+
+    public User(String login, String password, String email, Date registrationDate) {
+        this.login = login;
+        this.password = password;
+        this.email = email;
+        this.registrationDate = registrationDate;
+    }
+
     public String getLogin() {
         return login;
     }

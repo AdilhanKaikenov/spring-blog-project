@@ -26,6 +26,15 @@ public abstract class AbstractComment extends AbstractBaseEntity {
     @Column(name = "comment_date")
     private Date commentDate;
 
+    public AbstractComment() {
+    }
+
+    public AbstractComment(User user, String text, Date commentDate) {
+        this.user = user;
+        this.text = text;
+        this.commentDate = commentDate;
+    }
+
     public User getUser() {
         return user;
     }
