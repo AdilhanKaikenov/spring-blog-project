@@ -44,9 +44,6 @@ public class BlogServiceTest {
     @Autowired
     private BlogCommentRepository blogCommentRepository;
 
-    @Autowired
-    private CommentService<BlogComment> blogCommentService;
-
     @Test
     public void removeBlogByID_WithExistingBlog_ShouldDeleteBlog() throws BlogNotFoundException {
 
