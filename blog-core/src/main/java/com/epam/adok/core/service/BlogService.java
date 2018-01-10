@@ -41,6 +41,28 @@ public class BlogService {
         blogDao.delete(targetBlog);
     }
 
+//    @Transactional
+//    public boolean removeBlogByID(long id) {
+//
+//        Blog blog = this.blogDao.read(id);
+//        if (blog == null) {
+//            throw new
+//        }
+//
+//        try {
+//            blogCommentService.removeAllBlogCommentsByBlogId(id);
+//
+//            Blog targetBlog = new Blog();
+//            targetBlog.setId(id);
+//            blogDao.delete(targetBlog);
+//
+//            return true;
+//        } catch (final DataAccessException e) {
+//            // logging
+//            throw new
+//        }
+//    }
+
     public void updateBlog(Blog blog) {
         blogDao.update(blog);
     }
