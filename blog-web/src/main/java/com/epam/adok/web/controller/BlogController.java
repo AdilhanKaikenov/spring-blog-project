@@ -5,6 +5,7 @@ import com.epam.adok.core.entity.Blog;
 import com.epam.adok.core.entity.Category;
 import com.epam.adok.core.entity.User;
 import com.epam.adok.core.entity.comment.BlogComment;
+import com.epam.adok.core.exception.BlogNotFoundException;
 import com.epam.adok.core.exception.DateParsingException;
 import com.epam.adok.core.service.BlogService;
 import com.epam.adok.core.service.CategoryService;
@@ -132,7 +133,7 @@ public class BlogController {
 
     @RequestMapping(value = "/blog/{id}/delete", method = RequestMethod.GET)
     public ModelAndView delete(@PathVariable("id") String sourceId,
-                               ModelAndView modelAndView) {
+                               ModelAndView modelAndView) throws BlogNotFoundException {
 
         long id = Long.parseLong(sourceId);
         blogService.removeBlogByID(id);

@@ -4,14 +4,21 @@ import com.epam.adok.core.dao.BlogDao;
 import com.epam.adok.core.dao.impl.blog.BlogFilter;
 import com.epam.adok.core.entity.Blog;
 import com.epam.adok.core.entity.comment.BlogComment;
+import com.epam.adok.core.exception.BlogNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.NoResultException;
+import java.text.MessageFormat;
 import java.util.List;
 
 @Service
 public class BlogService {
+
+    private static final Logger log = LoggerFactory.getLogger(BlogService.class);
 
     @Autowired
     private BlogDao blogDao;
@@ -32,13 +39,18 @@ public class BlogService {
     }
 
     @Transactional
-    public void removeBlogByID(long id) {
-
+    public void removeBlogByID(long id) throws BlogNotFoundException {
+        Blog blog;
+        try {
+            blog = blogDao.read(id);
+        } catch (NoResultException e) {
+            String message = MessageFormat.format(
+                    "Blog with ID {0} was not found.", id);
+            log.info("Message from BlogService class : {}", message);
+            throw new BlogNotFoundException(message, e);
+        }
         blogCommentService.removeAllBlogCommentsByBlogId(id);
-
-        Blog targetBlog = new Blog();
-        targetBlog.setId(id);
-        blogDao.delete(targetBlog);
+        blogDao.delete(blog);
     }
 
     public void updateBlog(Blog blog) {
