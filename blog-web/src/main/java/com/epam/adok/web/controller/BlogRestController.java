@@ -1,6 +1,7 @@
 package com.epam.adok.web.controller;
 
 import com.epam.adok.core.entity.Blog;
+import com.epam.adok.core.exception.BlogNotFoundException;
 import com.epam.adok.core.service.BlogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -50,7 +51,7 @@ public class BlogRestController {
     }
 
     @RequestMapping(value = "/blog/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<Blog> delete(@PathVariable("id") long id) {
+    public ResponseEntity<Blog> delete(@PathVariable("id") long id) throws BlogNotFoundException {
         Blog blog = blogService.findBlogByID(id);
 
         if (blog == null) {
