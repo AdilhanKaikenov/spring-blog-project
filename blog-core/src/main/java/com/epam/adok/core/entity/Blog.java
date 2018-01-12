@@ -95,4 +95,30 @@ public class Blog extends UniqueIdEntity {
                 ", publicationDate=" + publicationDate +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        Blog blog = (Blog) o;
+
+        if (title != null ? !title.equals(blog.title) : blog.title != null) return false;
+        if (content != null ? !content.equals(blog.content) : blog.content != null) return false;
+        if (author != null ? !author.equals(blog.author) : blog.author != null) return false;
+        if (categories != null ? !categories.equals(blog.categories) : blog.categories != null) return false;
+        return publicationDate != null ? publicationDate.equals(blog.publicationDate) : blog.publicationDate == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (title != null ? title.hashCode() : 0);
+        result = 31 * result + (content != null ? content.hashCode() : 0);
+        result = 31 * result + (author != null ? author.hashCode() : 0);
+        result = 31 * result + (categories != null ? categories.hashCode() : 0);
+        result = 31 * result + (publicationDate != null ? publicationDate.hashCode() : 0);
+        return result;
+    }
 }
