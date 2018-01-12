@@ -11,8 +11,6 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.persistence.NoResultException;
 
@@ -22,8 +20,6 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class BlogServiceUnitTest {
-
-    private static final Logger log = LoggerFactory.getLogger(BlogServiceUnitTest.class);
 
     @InjectMocks // annotation is used to create and inject the mock object
     private BlogService blogService = new BlogService();
