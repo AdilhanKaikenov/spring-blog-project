@@ -50,22 +50,12 @@ public class BlogServiceTest {
     public void removeBlogByID_withExistingBlog_shouldDeleteBlog() throws BlogNotFoundException {
 
         // Given
-        User user = new User();
-        user.setId(1);
-
-        Category category = new Category();
-        category.setId(2);
-
-        Set<Category> categories = new HashSet<>();
-        categories.add(category);
-
-        Blog blog = new Blog(
-                "Title", "Content Text", user, categories, new Date());
+        Blog blog = this.getBlog();
 
         Blog savedBlog = this.blogRepository.saveAndFlush(blog);
 
         BlogComment blogComment = new BlogComment(
-                user, "Blog Comment text", new Date(), savedBlog, null);
+                blog.getAuthor(), "Blog Comment text", new Date(), savedBlog, null);
 
         BlogComment submittedBlogComment = blogCommentRepository.saveAndFlush(blogComment);
 
@@ -84,8 +74,41 @@ public class BlogServiceTest {
     }
 
     @Test
+    public void removeBlogByID_withExistingBlogAndWithoutComments_shouldDeleteBlog() throws BlogNotFoundException {
+
+        // Given
+        Blog blog = this.getBlog();
+
+        Blog savedBlog = this.blogRepository.saveAndFlush(blog);
+
+        // When
+        long savedBlogId = savedBlog.getId();
+        this.blogService.removeBlogByID(savedBlogId);
+
+        // Then
+        Optional<Blog> targetBlog = blogRepository.findById(savedBlogId);
+
+        assertThat(targetBlog.isPresent(), is(false));
+
+    }
+
+    @Test
     public void removeBlogByID_WithNonExistingBlog_ShouldThrowException() throws BlogNotFoundException {
         thrown.expect(BlogNotFoundException.class);
         this.blogService.removeBlogByID(70L);
+    }
+
+    private Blog getBlog() {
+        User user = new User();
+        user.setId(1);
+
+        Category category = new Category();
+        category.setId(2);
+
+        Set<Category> categories = new HashSet<>();
+        categories.add(category);
+
+        return new Blog(
+                "Title", "Content Text", user, categories, new Date());
     }
 }
