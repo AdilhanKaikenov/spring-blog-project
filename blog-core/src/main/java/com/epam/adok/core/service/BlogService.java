@@ -38,8 +38,15 @@ public class BlogService {
         return blogDao.readAll();
     }
 
+
+    /**
+     *
+     * @param id
+     * @throws BlogNotFoundException
+     * return number of deleted comments
+     */
     @Transactional
-    public void removeBlogByID(long id) throws BlogNotFoundException {
+    public long removeBlogByID(long id) throws BlogNotFoundException {
         Blog blog;
         try {
             blog = blogDao.read(id);
@@ -49,8 +56,12 @@ public class BlogService {
             log.info("Message from BlogService class : {}", message);
             throw new BlogNotFoundException(message, e);
         }
+        long commentNumber = blogCommentService.countAllBlogCommentByBlogId(id);
+        log.info("commentNumber {} ", commentNumber);
         blogCommentService.removeAllBlogCommentsByBlogId(id);
         blogDao.delete(blog);
+
+        return commentNumber;
     }
 
     public void updateBlog(Blog blog) {

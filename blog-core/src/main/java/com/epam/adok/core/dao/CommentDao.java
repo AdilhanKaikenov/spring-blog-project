@@ -11,4 +11,5 @@ public interface CommentDao<T extends AbstractComment> extends Dao<T> {
 
     void removeAllByBlogId(long id);
 
+    long countAllByBlogId(long id);
 }

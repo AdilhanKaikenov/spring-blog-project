@@ -57,6 +57,10 @@ public class CommentService<T extends AbstractComment> {
         commentDao.removeAllByBlogId(blogId);
     }
 
+    public long countAllBlogCommentByBlogId(long blogID) {
+        return commentDao.countAllByBlogId(blogID);
+    }
+
     private Notification createNotification(BlogComment comment) {;
         Notification notification = new Notification();
         User commentAuthor = comment.getUser();

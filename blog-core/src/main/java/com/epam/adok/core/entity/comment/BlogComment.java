@@ -9,7 +9,8 @@ import java.util.Date;
 @Entity
 @NamedQueries({
         @NamedQuery(name = "BlogComment.readAllByBlogId", query = "SELECT comment FROM BlogComment comment WHERE comment.blog.id = :id"),
-        @NamedQuery(name = "BlogComment.deleteAllBlogId", query = "DELETE FROM BlogComment comment WHERE comment.blog.id = :id")
+        @NamedQuery(name = "BlogComment.deleteAllBlogId", query = "DELETE FROM BlogComment comment WHERE comment.blog.id = :id"),
+        @NamedQuery(name = "BlogComment.countAllByBlogId", query = "SELECT count(comment) FROM BlogComment comment WHERE comment.blog.id = :id")
 })
 @DiscriminatorValue("BT")
 public class BlogComment extends AbstractComment {
