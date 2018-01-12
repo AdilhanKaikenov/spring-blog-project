@@ -53,8 +53,10 @@ public class CommentService<T extends AbstractComment> {
         return commentDao.readAllByBlogId(blogID);
     }
 
-    public void removeAllBlogCommentsByBlogId(long blogId) {
+    public long removeAllBlogCommentsByBlogId(long blogId) {
+        long result = this.countAllBlogCommentByBlogId(blogId);
         commentDao.removeAllByBlogId(blogId);
+        return result;
     }
 
     public long countAllBlogCommentByBlogId(long blogID) {

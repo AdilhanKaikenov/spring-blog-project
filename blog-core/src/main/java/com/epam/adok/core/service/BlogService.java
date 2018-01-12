@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.NoResultException;
-import java.text.MessageFormat;
 import java.util.List;
 
 @Service
@@ -47,21 +46,21 @@ public class BlogService {
      */
     @Transactional
     public long removeBlogByID(long id) throws BlogNotFoundException {
-        Blog blog;
-        try {
-            blog = blogDao.read(id);
-        } catch (NoResultException e) {
-            String message = MessageFormat.format(
-                    "Blog with ID {0} was not found.", id);
-            log.info("Message from BlogService class : {}", message);
-            throw new BlogNotFoundException(message, e);
-        }
-        long commentNumber = blogCommentService.countAllBlogCommentByBlogId(id);
-        log.info("commentNumber {} ", commentNumber);
-        blogCommentService.removeAllBlogCommentsByBlogId(id);
+        final Blog blog = this.getBlog(id);
+
+        long commentNumber = blogCommentService.removeAllBlogCommentsByBlogId(id);
         blogDao.delete(blog);
 
         return commentNumber;
+    }
+
+    private Blog getBlog(long id) throws BlogNotFoundException {
+        try {
+            return blogDao.read(id);
+        } catch (NoResultException e) {
+            log.info("Message from BlogService class : {}", id);
+            throw new BlogNotFoundException("Blog with ID " + id + " was not found.", e);
+        }
     }
 
     public void updateBlog(Blog blog) {
