@@ -9,7 +9,6 @@ import com.epam.adok.core.entity.comment.BlogComment;
 import com.epam.adok.core.exception.BlogNotFoundException;
 import com.epam.adok.core.repository.BlogCommentRepository;
 import com.epam.adok.core.repository.BlogRepository;
-import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -24,6 +23,9 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -45,7 +47,7 @@ public class BlogServiceTest {
     private BlogCommentRepository blogCommentRepository;
 
     @Test
-    public void removeBlogByID_WithExistingBlog_ShouldDeleteBlog() throws BlogNotFoundException {
+    public void removeBlogByID_withExistingBlog_shouldDeleteBlog() throws BlogNotFoundException {
 
         // Given
         User user = new User();
@@ -76,8 +78,8 @@ public class BlogServiceTest {
         Optional<Blog> targetBlog = blogRepository.findById(savedBlogId);
         Optional<BlogComment> targetComment = blogCommentRepository.findById(submittedBlogCommentId);
 
-        Assert.assertFalse(targetBlog.isPresent());
-        Assert.assertFalse(targetComment.isPresent());
+        assertThat(targetBlog.isPresent(), is(false));
+        assertThat(targetComment.isPresent(), is(false));
 
     }
 
