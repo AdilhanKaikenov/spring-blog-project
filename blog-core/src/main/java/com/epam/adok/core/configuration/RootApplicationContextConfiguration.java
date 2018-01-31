@@ -14,7 +14,7 @@ import javax.sql.DataSource;
 @EnableTransactionManagement
 @EnableScheduling
 @EnableJpaRepositories("com.epam.adok.core.repository")
-@Import(DataBaseConfiguration.class)
+@Import({DataBaseConfiguration.class, SpringAOPConfiguration.class})
 public class RootApplicationContextConfiguration {
 
     @Bean
@@ -26,4 +26,5 @@ public class RootApplicationContextConfiguration {
         dataSource.setPassword("admin");
         return dataSource;
     }
+
 }
