@@ -21,7 +21,7 @@ public class LogDaoMethodsAspect {
 
     @Before(value = "daoInterfacePointcut()")
     public void targetMethodAdvice(JoinPoint joinPoint) {
-        log.info("Dao method logging start ::: {}", joinPoint.getSignature().toShortString());
+        log.info("Dao interface method ::: {}", joinPoint.getSignature().toShortString());
     }
 
 }
