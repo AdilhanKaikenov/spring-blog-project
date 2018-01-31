@@ -15,12 +15,12 @@ public class LogDaoMethodsAspect {
     private static final Logger log = LoggerFactory.getLogger(LogDaoMethodsAspect.class);
 
     @Pointcut(value = "target(com.epam.adok.core.dao.Dao)")
-    public void targetMethod() {
+    public void daoInterfacePointcut() {
 
     }
 
-    @Before(value = "targetMethod()")
-    public void k(JoinPoint joinPoint) {
+    @Before(value = "daoInterfacePointcut()")
+    public void targetMethodAdvice(JoinPoint joinPoint) {
         log.info("Dao method logging start ::: {}", joinPoint.getSignature().toShortString());
     }
 
