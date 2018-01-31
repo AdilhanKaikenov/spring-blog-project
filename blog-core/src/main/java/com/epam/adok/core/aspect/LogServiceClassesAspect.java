@@ -18,21 +18,21 @@ public class LogServiceClassesAspect {
     public void targetMethodsPointcut() {
     }
 
-    @Pointcut(value = "!@annotation(org.springframework.transaction.annotation.Transactional)")
-    public void targetMethodNotTransactional() {
+    @Pointcut(value = "@annotation(org.springframework.transaction.annotation.Transactional)")
+    public void targetMethodTransactional() {
     }
 
-    @Before(value = "targetMethodsPointcut() && targetMethodNotTransactional()")
+    @Before(value = "targetMethodsPointcut() && !targetMethodTransactional()")
     public void startMethodLogAdvice(JoinPoint joinPoint) {
         log.info("Before method : {} ", joinPoint.getSignature().toShortString());
     }
 
-    @After(value = "targetMethodsPointcut() && targetMethodNotTransactional()")
+    @After(value = "targetMethodsPointcut() && !targetMethodTransactional()")
     public void endMethodLogAdvice(JoinPoint joinPoint) {
         log.info("After method : {} ", joinPoint.getSignature().toShortString());
     }
 
-    @Around(value = "targetMethodsPointcut() && @annotation(org.springframework.transaction.annotation.Transactional)")
+    @Around(value = "targetMethodsPointcut() && targetMethodTransactional()")
     public Object logTransactionalMethodAdvice(ProceedingJoinPoint pjp) throws Throwable {
         String methodName = pjp.getSignature().toShortString();
         log.info("Start TRANSACTIONAL method : {} ", methodName);
