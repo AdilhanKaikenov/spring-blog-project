@@ -1,10 +1,8 @@
 package com.epam.adok.core.aspect;
 
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.After;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -20,13 +18,31 @@ public class LogServiceClassesAspect {
     public void targetMethodsPointcut() {
     }
 
-    @Before(value = "targetMethodsPointcut()")
+    @Pointcut(value = "!@annotation(org.springframework.transaction.annotation.Transactional)")
+    public void targetMethodNotTransactional() {
+    }
+
+    @Before(value = "targetMethodsPointcut() && targetMethodNotTransactional()")
     public void startMethodLogAdvice(JoinPoint joinPoint) {
         log.info("Before method : {} ", joinPoint.getSignature().toShortString());
     }
 
-    @After(value = "targetMethodsPointcut()")
+    @After(value = "targetMethodsPointcut() && targetMethodNotTransactional()")
     public void endMethodLogAdvice(JoinPoint joinPoint) {
         log.info("After method : {} ", joinPoint.getSignature().toShortString());
+    }
+
+    @Around(value = "targetMethodsPointcut() && @annotation(org.springframework.transaction.annotation.Transactional)")
+    public Object logTransactionalMethodAdvice(ProceedingJoinPoint pjp) throws Throwable {
+        String methodName = pjp.getSignature().toShortString();
+        log.info("Start TRANSACTIONAL method : {} ", methodName);
+
+        Object result = pjp.proceed();
+
+        if (result != null) {
+            log.info("{} returned {}", methodName, result.toString());
+        }
+        log.info("Transaction completed");
+        return result;
     }
 }
