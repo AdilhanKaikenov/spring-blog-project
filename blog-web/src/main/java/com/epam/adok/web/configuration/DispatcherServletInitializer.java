@@ -1,6 +1,7 @@
 package com.epam.adok.web.configuration;
 
 import com.epam.adok.core.configuration.RootApplicationContextConfiguration;
+import com.epam.adok.web.configuration.security.LoginSecurityConfig;
 import org.springframework.lang.Nullable;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
@@ -10,7 +11,8 @@ public class DispatcherServletInitializer extends AbstractAnnotationConfigDispat
     @Override
     protected Class<?>[] getRootConfigClasses() {
         return new Class[]{
-                RootApplicationContextConfiguration.class
+                RootApplicationContextConfiguration.class,
+                LoginSecurityConfig.class
         };
     }
 

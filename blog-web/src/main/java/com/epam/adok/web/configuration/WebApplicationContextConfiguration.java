@@ -1,6 +1,7 @@
 package com.epam.adok.web.configuration;
 
 import com.epam.adok.core.configuration.SpringAOPConfiguration;
+import com.epam.adok.web.configuration.security.LoginSecurityConfig;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -14,7 +15,7 @@ import org.springframework.web.servlet.view.tiles3.TilesView;
 @Configuration
 @EnableWebMvc
 @ComponentScan("com.epam.adok.web.controller")
-@Import(SpringAOPConfiguration.class)
+@Import({SpringAOPConfiguration.class, LoginSecurityConfig.class})
 public class WebApplicationContextConfiguration {
 
     @Bean
