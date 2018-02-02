@@ -8,6 +8,7 @@ Spring Project for practice.
 5. Task Execution and Scheduling
 6. RESTful Web Services
 7. Spring Security
+8. Spring AOP
 * Java Persistence API (JPA):
 1. Object-Relational Mapping (ORM)
 2. QueryDSL
