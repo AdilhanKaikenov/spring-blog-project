@@ -22,6 +22,11 @@ subprojects {
         compile 'org.springframework:spring-aspects:5.0.2.RELEASE'
         compile 'org.springframework.data:spring-data-jpa:2.0.2.RELEASE'
         compile 'org.springframework:spring-context-support:5.0.2.RELEASE'
+
+        compile 'org.springframework.security:spring-security-web:5.0.1.RELEASE'
+        compile 'org.springframework.security:spring-security-config:5.0.1.RELEASE'
+        compile 'org.springframework.security:spring-security-taglibs:5.0.1.RELEASE'
+
         testCompile 'org.springframework:spring-test:5.0.2.RELEASE'
 //        Validation
         compile 'org.hibernate:hibernate-validator:5.0.0.Final'
