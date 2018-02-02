@@ -5,8 +5,6 @@ import com.epam.adok.core.entity.User;
 import com.epam.adok.core.entity.comment.BlogComment;
 import com.epam.adok.core.service.CommentService;
 import com.epam.adok.web.model.BlogCommentModel;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -25,8 +23,6 @@ import java.util.List;
 
 @Controller
 public class CommentController {
-
-    private static final Logger log = LoggerFactory.getLogger(CommentController.class);
 
     @Autowired
     private CommentService<BlogComment> blogCommentService;

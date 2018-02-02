@@ -1,4 +1,4 @@
-package com.epam.adok.web.controller;
+package com.epam.adok.web.controller.rest;
 
 import com.epam.adok.core.entity.Blog;
 import com.epam.adok.core.exception.BlogNotFoundException;

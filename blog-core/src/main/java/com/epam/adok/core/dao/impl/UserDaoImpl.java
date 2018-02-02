@@ -16,18 +16,11 @@ public class UserDaoImpl extends GenericDao<User> implements UserDao {
 
     @Override
     public User findByAuth(String login, String password) {
-        try {
-//        Query query = getEntityManager().createQuery("select u from User u where u.login = :login and u.password = :password");
-
             Query query = getEntityManager().createNamedQuery("User.readAuth");
             query.setParameter("login", login);
             query.setParameter("password", password);
             List userList = query.getResultList();
             return userList.isEmpty() ? null : (User) userList.iterator().next();
-        } catch (final Exception e) {
-            log.error(e.getMessage(), e);
-            throw e;
-        }
     }
 
     @Override
