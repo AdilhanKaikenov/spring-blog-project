@@ -22,7 +22,7 @@ public class AuthenticationController {
             model.addObject("message", "Logged out successfully.");
         }
 
-        model.setViewName("loginPage");
+        model.setViewName("login-page");
         return model;
     }
 }

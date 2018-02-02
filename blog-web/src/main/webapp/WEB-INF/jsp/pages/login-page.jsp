@@ -16,7 +16,8 @@
             <td><input type="password" name="password"/></td>
         </tr>
         <tr>
-            <td colspan="2"><input name="submit" type="submit" value="submit" /></td>
+            <td><input name="submit" type="submit" value="Sign In" /></td>
+            <td><a href="${pageContext.request.contextPath}/blog">Back</a></td>
         </tr>
     </table>
     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
