@@ -7,6 +7,7 @@ Spring Project for practice.
 4. Async method
 5. Task Execution and Scheduling
 6. RESTful Web Services
+7. Spring Security
 * Java Persistence API (JPA):
 1. Object-Relational Mapping (ORM)
 2. QueryDSL
@@ -15,6 +16,7 @@ Spring Project for practice.
 * Gradle
 * JBoss (wildfly-10.1.0.Final)
 * Slf4j + Log4j
+* JUnit & Mockito 
 
 Приложение - Блог:
 ------------------
