@@ -3,6 +3,7 @@ package com.epam.adok.web.controller;
 import com.epam.adok.core.dao.impl.blog.BlogFilter;
 import com.epam.adok.core.entity.Blog;
 import com.epam.adok.core.entity.Category;
+import com.epam.adok.core.entity.Role;
 import com.epam.adok.core.entity.User;
 import com.epam.adok.core.entity.comment.BlogComment;
 import com.epam.adok.core.exception.BlogNotFoundException;
@@ -10,11 +11,14 @@ import com.epam.adok.core.exception.DateParsingException;
 import com.epam.adok.core.service.BlogService;
 import com.epam.adok.core.service.CategoryService;
 import com.epam.adok.core.service.CommentService;
+import com.epam.adok.core.service.UserService;
 import com.epam.adok.core.util.DateRange;
 import com.epam.adok.web.exception.NotFoundException;
 import com.epam.adok.web.model.BlogCommentModel;
 import com.epam.adok.web.model.BlogFilterModel;
 import com.epam.adok.web.model.BlogModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,6 +36,8 @@ import java.util.Map;
 @Controller
 public class BlogController {
 
+    private static final Logger log = LoggerFactory.getLogger(BlogController.class);
+
     private static final int ONE = 1;
 
     @Autowired
@@ -42,6 +48,9 @@ public class BlogController {
 
     @Autowired
     private CommentService<BlogComment> blogCommentService;
+
+    @Autowired
+    private UserService userService;
 
     @RequestMapping(value = "/blog", method = RequestMethod.GET)
     public ModelAndView blogs(ModelAndView modelAndView) {
@@ -129,7 +138,22 @@ public class BlogController {
 
     @RequestMapping(value = "/blog/{id}/delete", method = RequestMethod.GET)
     public ModelAndView delete(@PathVariable("id") String sourceId,
-                               ModelAndView modelAndView) throws BlogNotFoundException {
+                               ModelAndView modelAndView) throws BlogNotFoundException, javassist.NotFoundException {
+
+        User currentUser = userService.getCurrentUser();
+
+        if (currentUser != null) {
+
+            String currentUserLogin = currentUser.getLogin();
+            List<Role> roles = currentUser.getRoles();
+
+            log.info("Current User Login : {}", currentUserLogin);
+
+            log.info("User ROLES : ");
+            for (Role role : roles) {
+                log.info(" ----> {}", role.getName());
+            }
+        }
 
         long id = Long.parseLong(sourceId);
         blogService.removeBlogByID(id);
@@ -231,8 +255,8 @@ public class BlogController {
         List<Category> categories = getCategoriesByIds(blogModel.getCategoriesIds());
         blog.setCategories(new HashSet<>(categories));
 
-        User user = new User(); // TODO : User
-        user.setId(1); // User ID : 1
+        User user = new User();
+        user.setId(userService.getCurrentUser().getId());
         blog.setAuthor(user);
 
         blog.setTitle(blogModel.getTitle());

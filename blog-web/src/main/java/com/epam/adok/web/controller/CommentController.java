@@ -4,6 +4,7 @@ import com.epam.adok.core.entity.Blog;
 import com.epam.adok.core.entity.User;
 import com.epam.adok.core.entity.comment.BlogComment;
 import com.epam.adok.core.service.CommentService;
+import com.epam.adok.core.service.UserService;
 import com.epam.adok.web.model.BlogCommentModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,6 +27,9 @@ public class CommentController {
 
     @Autowired
     private CommentService<BlogComment> blogCommentService;
+
+    @Autowired
+    private UserService userService;
 
     @RequestMapping(value = "/blog/{blogId}/comment", method = RequestMethod.POST)
 
@@ -65,7 +69,7 @@ public class CommentController {
         blogComment.setBlog(blog);
 
         User user = new User();
-        user.setId(1); // TODO : User
+        user.setId(userService.getCurrentUser().getId());
         blogComment.setUser(user);
 
         blogComment.setText(blogCommentModel.getText());
