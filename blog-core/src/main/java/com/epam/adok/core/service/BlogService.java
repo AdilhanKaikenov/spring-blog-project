@@ -8,6 +8,7 @@ import com.epam.adok.core.exception.BlogNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,7 +38,6 @@ public class BlogService {
         return blogDao.readAll();
     }
 
-
     /**
      *
      * @param id
@@ -45,11 +45,12 @@ public class BlogService {
      * return number of deleted comments
      */
     @Transactional
+    @PreAuthorize("hasRole('ADMIN') or hasPermission(#id, 'permissionToRemove')")
     public long removeBlogByID(long id) throws BlogNotFoundException {
         final Blog blog = this.getBlog(id);
 
-        long commentNumber = blogCommentService.removeAllBlogCommentsByBlogId(id);
-        blogDao.delete(blog);
+        long commentNumber = this.blogCommentService.removeAllBlogCommentsByBlogId(id);
+        this.blogDao.delete(blog);
 
         return commentNumber;
     }
