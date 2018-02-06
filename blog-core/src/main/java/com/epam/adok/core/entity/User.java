@@ -7,7 +7,8 @@ import java.util.List;
 @Entity
 @NamedQueries({
         @NamedQuery(name = "User.readById", query = "SELECT user FROM User user WHERE user.id = :id"),
-        @NamedQuery(name = "User.readAuth", query = "SELECT user FROM User user WHERE user.login = :login and user.password = :password")
+        @NamedQuery(name = "User.readAuth", query = "SELECT user FROM User user WHERE user.login = :login and user.password = :password"),
+        @NamedQuery(name = "User.readByLogin", query = "SELECT user FROM User user WHERE user.login = :login")
 })
 @Table(name = "user")
 public class User extends AbstractBaseEntity {
