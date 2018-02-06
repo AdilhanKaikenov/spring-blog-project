@@ -16,6 +16,8 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -104,14 +106,14 @@ public class BlogServiceTest {
         this.blogService.removeBlogByID(70L);
     }
 
-    @Test(expected = org.springframework.security.access.AccessDeniedException.class)
+    @Test(expected = AccessDeniedException.class)
     public void removeBlogByID_WithNoPrivilege_thenForbidden() throws Exception {
 
         // Given
         Blog blog = this.getBlog();
 
         User user = new User();
-        user.setId(2); // not the author
+        user.setId(1); // not the author
 
         this.createAuthenticatedUser(user, "ROLE_USER");
 
@@ -125,14 +127,32 @@ public class BlogServiceTest {
         // org.springframework.security.access.AccessDeniedException
     }
 
-    @Test(expected = org.springframework.security.authentication.AuthenticationCredentialsNotFoundException.class)
+    @Test
+    public void removeBlogByID_adminRemovesBlog_shouldDeleteBlog() throws Exception {
+
+        // Given
+        Blog blog = this.getBlog();
+
+        User user = new User();
+        user.setId(1); // not the author
+
+        this.createAuthenticatedUser(user, "ROLE_USER", "ROLE_ADMIN");
+
+        Blog savedBlog = this.blogRepository.saveAndFlush(blog);
+        long savedBlogId = savedBlog.getId();
+
+        // When
+        this.blogService.removeBlogByID(savedBlogId);
+    }
+
+    @Test(expected = AuthenticationCredentialsNotFoundException.class)
     public void removeBlogByID_WithNoAuthentication_thenThrowException() throws Exception {
         this.blogService.removeBlogByID(2);
     }
 
     private Blog getBlog() {
         User user = new User();
-        user.setId(1);
+        user.setId(2);
 
         Category category = new Category();
         category.setId(2);
