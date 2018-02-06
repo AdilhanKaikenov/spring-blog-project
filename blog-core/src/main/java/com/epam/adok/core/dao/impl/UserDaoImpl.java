@@ -24,6 +24,14 @@ public class UserDaoImpl extends GenericDao<User> implements UserDao {
     }
 
     @Override
+    public User findByLogin(String login) {
+        Query query = getEntityManager().createNamedQuery("User.readByLogin");
+        query.setParameter("login", login);
+        List userList = query.getResultList();
+        return userList.isEmpty() ? null : (User) userList.iterator().next();
+    }
+
+    @Override
     protected Query getReadAllNamedQuery() {
         throw new UnsupportedOperationException("Not implemented yet");
     }
