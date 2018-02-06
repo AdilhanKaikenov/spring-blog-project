@@ -1,8 +1,10 @@
 package com.epam.adok.web.configuration.security;
 
 import com.epam.adok.core.auth.UserAuthenticationProviderService;
+import com.epam.adok.core.configuration.MethodSecurityConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -11,6 +13,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
+@Import(MethodSecurityConfig.class)
 public class LoginSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -30,6 +33,8 @@ public class LoginSecurityConfig extends WebSecurityConfigurerAdapter {
                 .defaultSuccessUrl("/blog")
                 .failureUrl("/login?error")
                 .usernameParameter("username").passwordParameter("password")
+                .and()
+                .exceptionHandling().accessDeniedPage("/access-denied")
                 .and()
                 .logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))

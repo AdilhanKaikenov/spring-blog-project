@@ -14,7 +14,7 @@ import javax.sql.DataSource;
 @EnableTransactionManagement
 @EnableScheduling
 @EnableJpaRepositories("com.epam.adok.core.repository")
-@Import({DataBaseConfiguration.class, SpringAOPConfiguration.class})
+@Import({DataBaseConfiguration.class, SpringAOPConfiguration.class, MethodSecurityConfig.class})
 public class RootApplicationContextConfiguration {
 
     @Bean
