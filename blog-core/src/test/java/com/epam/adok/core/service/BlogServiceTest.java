@@ -13,7 +13,13 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.TestingAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -25,10 +31,11 @@ import java.util.Set;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestApplicationContextConfiguration.class)
 public class BlogServiceTest {
+
+    private static final Logger log = LoggerFactory.getLogger(BlogServiceTest.class);
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
@@ -43,6 +50,7 @@ public class BlogServiceTest {
     private BlogCommentRepository blogCommentRepository;
 
     @Test
+    @WithMockUser(username = "admin", roles = {"USER", "ADMIN"})
     public void removeBlogByID_withExistingBlog_shouldDeleteBlog() throws BlogNotFoundException {
 
         // Given
@@ -70,6 +78,7 @@ public class BlogServiceTest {
     }
 
     @Test
+    @WithMockUser(username = "admin", roles = {"USER", "ADMIN"})
     public void removeBlogByID_withExistingBlogAndWithoutComments_shouldDeleteBlog() throws BlogNotFoundException {
 
         // Given
@@ -89,9 +98,36 @@ public class BlogServiceTest {
     }
 
     @Test
+    @WithMockUser(username = "admin", roles = {"USER", "ADMIN"})
     public void removeBlogByID_WithNonExistingBlog_ShouldThrowException() throws BlogNotFoundException {
         thrown.expect(BlogNotFoundException.class);
         this.blogService.removeBlogByID(70L);
+    }
+
+    @Test(expected = org.springframework.security.access.AccessDeniedException.class)
+    public void removeBlogByID_WithNoPrivilege_thenForbidden() throws Exception {
+
+        // Given
+        Blog blog = this.getBlog();
+
+        User user = new User();
+        user.setId(2); // not the author
+
+        this.createAuthenticatedUser(user, "ROLE_USER");
+
+        Blog savedBlog = this.blogRepository.saveAndFlush(blog);
+        long savedBlogId = savedBlog.getId();
+
+        // When
+        this.blogService.removeBlogByID(savedBlogId);
+
+        // Then
+        // org.springframework.security.access.AccessDeniedException
+    }
+
+    @Test(expected = org.springframework.security.authentication.AuthenticationCredentialsNotFoundException.class)
+    public void removeBlogByID_WithNoAuthentication_thenThrowException() throws Exception {
+        this.blogService.removeBlogByID(2);
     }
 
     private Blog getBlog() {
@@ -106,5 +142,11 @@ public class BlogServiceTest {
 
         return new Blog(
                 "Title", "Content Text", user, categories, new Date());
+    }
+
+    private void createAuthenticatedUser(User user, String... authorities) {
+        Authentication authentication =
+                new TestingAuthenticationToken(user, "notused", authorities);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 }

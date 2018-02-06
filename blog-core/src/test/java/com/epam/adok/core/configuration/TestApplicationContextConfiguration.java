@@ -12,7 +12,7 @@ import javax.sql.DataSource;
 @Configuration
 @ComponentScan("com.epam.adok.core")
 @EnableJpaRepositories("com.epam.adok.core.repository")
-@Import(DataBaseConfiguration.class)
+@Import({DataBaseConfiguration.class, MethodSecurityConfig.class})
 public class TestApplicationContextConfiguration {
 
     @Bean
