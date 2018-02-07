@@ -1,7 +1,7 @@
 package com.epam.adok.web.configuration.security;
 
 import com.epam.adok.core.auth.AppUserDetailsService;
-import com.epam.adok.core.configuration.MethodSecurityConfig;
+import com.epam.adok.core.configuration.MethodSecurityConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +17,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
-@Import(MethodSecurityConfig.class)
+@Import(MethodSecurityConfiguration.class)
 public class LoginSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
