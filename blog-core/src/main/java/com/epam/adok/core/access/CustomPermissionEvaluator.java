@@ -34,6 +34,9 @@ public class CustomPermissionEvaluator implements PermissionEvaluator {
         Blog blogByID = this.blogService.findBlogByID((Long)targetDomainObject);
 
         User blogAuthor = blogByID.getAuthor();
+        log.info("Blog author details = {}", blogAuthor);
+        log.info("Authentication - current principal details = {}", authentication.getPrincipal());
+        log.info("Current authenticated user = {}", currentUser);
 
         switch (permission.toString()) {
             case "permissionToRemove":
