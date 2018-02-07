@@ -1,6 +1,7 @@
 package com.epam.adok.core.service;
 
 
+import com.epam.adok.core.auth.UserPrincipal;
 import com.epam.adok.core.configuration.TestApplicationContextConfiguration;
 import com.epam.adok.core.entity.Blog;
 import com.epam.adok.core.entity.Category;
@@ -21,6 +22,7 @@ import org.springframework.security.authentication.AuthenticationCredentialsNotF
 import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -103,7 +105,7 @@ public class BlogServiceTest {
     @WithMockUser(username = "admin", roles = {"USER", "ADMIN"})
     public void removeBlogByID_WithNonExistingBlog_ShouldThrowException() throws BlogNotFoundException {
         thrown.expect(BlogNotFoundException.class);
-        this.blogService.removeBlogByID(70L);
+        this.blogService.removeBlogByID(0);
     }
 
     @Test(expected = AccessDeniedException.class)
@@ -114,8 +116,11 @@ public class BlogServiceTest {
 
         User user = new User();
         user.setId(1); // not the author
+        user.setLogin("User1");
+        user.setPassword("Password");
 
-        this.createAuthenticatedUser(user, "ROLE_USER");
+        final UserDetails userDetails = this.getUserDetailsFromUser(user);
+        this.createAuthenticatedUser(userDetails, "ROLE_USER");
 
         Blog savedBlog = this.blogRepository.saveAndFlush(blog);
         long savedBlogId = savedBlog.getId();
@@ -135,8 +140,32 @@ public class BlogServiceTest {
 
         User user = new User();
         user.setId(1); // not the author
+        user.setLogin("User1");
+        user.setPassword("Password");
 
-        this.createAuthenticatedUser(user, "ROLE_USER", "ROLE_ADMIN");
+        final UserDetails userDetails = this.getUserDetailsFromUser(user);
+        this.createAuthenticatedUser(userDetails, "ROLE_USER", "ROLE_ADMIN");
+
+        Blog savedBlog = this.blogRepository.saveAndFlush(blog);
+        long savedBlogId = savedBlog.getId();
+
+        // When
+        this.blogService.removeBlogByID(savedBlogId);
+    }
+
+    @Test
+    public void removeBlogByID_authorRemovesBlog_shouldDeleteBlog() throws Exception {
+
+        // Given
+        Blog blog = this.getBlog();
+
+        User user = new User();
+        user.setId(2); // author
+        user.setLogin("User2");
+        user.setPassword("Password");
+
+        final UserDetails userDetails = this.getUserDetailsFromUser(user);
+        this.createAuthenticatedUser(userDetails, "ROLE_USER");
 
         Blog savedBlog = this.blogRepository.saveAndFlush(blog);
         long savedBlogId = savedBlog.getId();
@@ -148,6 +177,10 @@ public class BlogServiceTest {
     @Test(expected = AuthenticationCredentialsNotFoundException.class)
     public void removeBlogByID_WithNoAuthentication_thenThrowException() throws Exception {
         this.blogService.removeBlogByID(2);
+    }
+
+    private UserDetails getUserDetailsFromUser(User user) {
+        return new UserPrincipal(user.getLogin(), user.getPassword(), null);
     }
 
     private Blog getBlog() {
@@ -164,9 +197,9 @@ public class BlogServiceTest {
                 "Title", "Content Text", user, categories, new Date());
     }
 
-    private void createAuthenticatedUser(User user, String... authorities) {
+    private void createAuthenticatedUser(UserDetails userDetails, String... authorities) {
         Authentication authentication =
-                new TestingAuthenticationToken(user, "notused", authorities);
+                new TestingAuthenticationToken(userDetails, "notused", authorities);
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 }
