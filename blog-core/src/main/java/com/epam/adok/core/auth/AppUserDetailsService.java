@@ -11,8 +11,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -26,15 +24,13 @@ public class AppUserDetailsService implements UserDetailsService {
     @Autowired
     private UserService userService;
 
-    private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         User user = this.userService.getUserByLogin(username);
 
         String login = user.getLogin();
-        String password = passwordEncoder.encode(user.getPassword());
+        String password = user.getPassword();
         List<Role> roles = user.getRoles();
 
         List<GrantedAuthority> authorities = this.getAuthorities(roles);
