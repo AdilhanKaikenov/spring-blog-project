@@ -72,7 +72,7 @@ public class CommentService<T extends AbstractComment> {
 
         Multimap<Long, BlogComment> commentsHierarchyMap = BlogCommentStructureBuilder.getCommentsAsHierarchyMap(blogComments);
 
-        return BlogCommentStructureBuilder.buildTree(commentsHierarchyMap, 0L); // zero is the mark for root comments with parentId = null
+        return BlogCommentStructureBuilder.buildCommentBranchTree(commentsHierarchyMap, 0L); // zero is the mark for root comments with parentId = null
     }
 
     private Notification createNotification(BlogComment comment) {

@@ -11,7 +11,7 @@ import java.util.List;
 
 public class BlogCommentStructureBuilder {
 
-    public static List<CommentBranch> buildTree(Multimap<Long, BlogComment> map, Long parentId) {
+    public static List<CommentBranch> buildCommentBranchTree(Multimap<Long, BlogComment> map, Long parentId) {
 
         List<CommentBranch> commentsBranches = new ArrayList<>();
 
@@ -21,7 +21,7 @@ public class BlogCommentStructureBuilder {
             for (BlogComment blogComment : blogComments) {
                 CommentBranch commentBranch = new CommentBranch();
                 commentBranch.setRootBlogComment(blogComment);
-                List<CommentBranch> commentBranches = buildTree(map, blogComment.getId());
+                List<CommentBranch> commentBranches = buildCommentBranchTree(map, blogComment.getId());
                 commentBranch.setSubComments(commentBranches);
 
                 commentsBranches.add(commentBranch);
