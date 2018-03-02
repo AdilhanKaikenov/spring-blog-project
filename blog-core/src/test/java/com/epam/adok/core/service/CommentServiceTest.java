@@ -57,7 +57,7 @@ public class CommentServiceTest {
     }
 
     @Test
-    public void findAllCommentsByBlogID_checkThatTheNumberOfCommentsMatches_shouldReturnTrue() {
+    public void findAllCommentsByBlogID_checkThatTheNumberOfCommentsMatches_shouldCorrespondToReality() {
         List<BlogComment> allBlogCommentByBlogId = this.commentService.findAllBlogCommentByBlogId(1L);
         int numberOfComments = allBlogCommentByBlogId.size();
 
