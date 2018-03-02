@@ -1,5 +1,6 @@
 package com.epam.adok.core.service;
 
+import com.epam.adok.core.commentshierarchy.CommentBranch;
 import com.epam.adok.core.dao.CommentDao;
 import com.epam.adok.core.dao.NotificationDao;
 import com.epam.adok.core.entity.Blog;
@@ -8,6 +9,8 @@ import com.epam.adok.core.entity.User;
 import com.epam.adok.core.entity.comment.AbstractComment;
 import com.epam.adok.core.entity.comment.BlogComment;
 import com.epam.adok.core.messagesender.EmailNotificationMessageSender;
+import com.epam.adok.core.util.BlogCommentStructureBuilder;
+import com.google.common.collect.Multimap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +66,16 @@ public class CommentService<T extends AbstractComment> {
         return commentDao.countAllByBlogId(blogID);
     }
 
-    private Notification createNotification(BlogComment comment) {;
+    public List<CommentBranch> buildAllCommentBranchesByBlogId(long blogId) {
+
+        List<BlogComment> blogComments = this.commentDao.readAllByBlogId(blogId);
+
+        Multimap<Long, BlogComment> commentsHierarchyMap = BlogCommentStructureBuilder.getCommentsAsHierarchyMap(blogComments);
+
+        return BlogCommentStructureBuilder.buildTree(commentsHierarchyMap, 0L); // zero is the mark for root comments with parentId = null
+    }
+
+    private Notification createNotification(BlogComment comment) {
         Notification notification = new Notification();
         User commentAuthor = comment.getUser();
         Blog commentBlog = comment.getBlog();
