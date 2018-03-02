@@ -18,6 +18,8 @@ Spring Project for practice.
 * JBoss (wildfly-10.1.0.Final)
 * Slf4j + Log4j
 * JUnit & Mockito 
+* DBSetup
+* Guava (Multimap)
 
 Приложение - Блог:
 ------------------
