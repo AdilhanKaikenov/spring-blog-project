@@ -9,7 +9,7 @@ import com.epam.adok.core.entity.User;
 import com.epam.adok.core.entity.comment.AbstractComment;
 import com.epam.adok.core.entity.comment.BlogComment;
 import com.epam.adok.core.messagesender.EmailNotificationMessageSender;
-import com.epam.adok.core.util.BlogCommentStructureBuilder;
+import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,8 +17,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+
+import static com.epam.adok.core.service.CommentService.BlogCommentsStructureBuilder.buildCommentBranchTree;
+import static com.epam.adok.core.service.CommentService.BlogCommentsStructureBuilder.getCommentsAsHierarchyMap;
+
 
 @Service
 public class CommentService<T extends AbstractComment> {
@@ -70,9 +76,9 @@ public class CommentService<T extends AbstractComment> {
 
         List<BlogComment> blogComments = this.commentDao.readAllByBlogId(blogId);
 
-        Multimap<Long, BlogComment> commentsHierarchyMap = BlogCommentStructureBuilder.getCommentsAsHierarchyMap(blogComments);
+        Multimap<Long, BlogComment> commentsHierarchyMap = getCommentsAsHierarchyMap(blogComments);
 
-        return BlogCommentStructureBuilder.buildCommentBranchTree(commentsHierarchyMap, 0L); // zero is the mark for root comments with parentId = null
+        return buildCommentBranchTree(commentsHierarchyMap, 0L); // zero is the mark for root comments with parentId = null
     }
 
     private Notification createNotification(BlogComment comment) {
@@ -84,5 +90,38 @@ public class CommentService<T extends AbstractComment> {
         notification.setBlog(commentBlog);
         notification.setDate(date);
         return notification;
+    }
+
+    protected static class BlogCommentsStructureBuilder {
+
+        protected static List<CommentBranch> buildCommentBranchTree(Multimap<Long, BlogComment> map, Long parentId) {
+            List<CommentBranch> commentsBranches = new ArrayList<>();
+
+            Collection<BlogComment> blogComments = map.get(parentId);
+
+            if (!blogComments.isEmpty()) {
+                for (BlogComment blogComment : blogComments) {
+                    CommentBranch commentBranch = new CommentBranch();
+                    commentBranch.setRootBlogComment(blogComment);
+                    List<CommentBranch> commentBranches = buildCommentBranchTree(map, blogComment.getId());
+                    commentBranch.setSubComments(commentBranches);
+
+                    commentsBranches.add(commentBranch);
+                }
+            }
+            return commentsBranches;
+        }
+
+        protected static Multimap<Long, BlogComment> getCommentsAsHierarchyMap(List<BlogComment> blogComments) {
+            Multimap<Long, BlogComment> resultMap = HashMultimap.create();
+
+            for (BlogComment blogComment : blogComments) {
+                if (blogComment.getParentComment() == null) {
+                    blogComment.setParentComment(new BlogComment());
+                }
+                resultMap.put(blogComment.getParentComment().getId(), blogComment);
+            }
+            return resultMap;
+        }
     }
 }
