@@ -65,7 +65,7 @@ public class BlogServiceTest {
         BlogComment blogComment = new BlogComment(
                 blog.getAuthor(), "Blog Comment text", new Date(), savedBlog, null);
 
-        BlogComment submittedBlogComment = blogCommentRepository.saveAndFlush(blogComment);
+        BlogComment submittedBlogComment = this.blogCommentRepository.saveAndFlush(blogComment);
 
         // When
         long savedBlogId = savedBlog.getId();
@@ -73,8 +73,8 @@ public class BlogServiceTest {
 
         // Then
         long submittedBlogCommentId = submittedBlogComment.getId();
-        Optional<Blog> targetBlog = blogRepository.findById(savedBlogId);
-        Optional<BlogComment> targetComment = blogCommentRepository.findById(submittedBlogCommentId);
+        Optional<Blog> targetBlog = this.blogRepository.findById(savedBlogId);
+        Optional<BlogComment> targetComment = this.blogCommentRepository.findById(submittedBlogCommentId);
 
         assertThat(targetBlog.isPresent(), is(false));
         assertThat(targetComment.isPresent(), is(false));
@@ -95,7 +95,7 @@ public class BlogServiceTest {
         this.blogService.removeBlogByID(savedBlogId);
 
         // Then
-        Optional<Blog> targetBlog = blogRepository.findById(savedBlogId);
+        Optional<Blog> targetBlog = this.blogRepository.findById(savedBlogId);
 
         assertThat(targetBlog.isPresent(), is(false));
 
@@ -104,7 +104,7 @@ public class BlogServiceTest {
     @Test
     @WithMockUser(username = "admin", roles = {"USER", "ADMIN"})
     public void removeBlogByID_WithNonExistingBlog_ShouldThrowException() throws BlogNotFoundException {
-        thrown.expect(BlogNotFoundException.class);
+        this.thrown.expect(BlogNotFoundException.class);
         this.blogService.removeBlogByID(0);
     }
 

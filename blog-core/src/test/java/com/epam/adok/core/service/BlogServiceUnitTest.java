@@ -43,18 +43,18 @@ public class BlogServiceUnitTest {
         blog.setId(blogId);
         blog.setTitle("Title");
 
-        when(blogDao.read(blogId)).thenReturn(blog);
-        when(blogCommentService.countAllBlogCommentByBlogId(blogId)).thenReturn(0L);
+        when(this.blogDao.read(blogId)).thenReturn(blog);
+        when(this.blogCommentService.countAllBlogCommentByBlogId(blogId)).thenReturn(0L);
 
         // When
         long commentNumber = this.blogService.removeBlogByID(blogId);
 
         // Then
-        verify(blogDao).read(blogId);
-        verify(blogCommentService).removeAllBlogCommentsByBlogId(blogId);
+        verify(this.blogDao).read(blogId);
+        verify(this.blogCommentService).removeAllBlogCommentsByBlogId(blogId);
 
-        verify(blogDao).delete(argCaptor.capture());
-        assertEquals(blog, argCaptor.getValue());
+        verify(this.blogDao).delete(this.argCaptor.capture());
+        assertEquals(blog, this.argCaptor.getValue());
 
     }
 
@@ -64,7 +64,7 @@ public class BlogServiceUnitTest {
         Blog blog = new Blog();
         blog.setId(blogId);
 
-        when(blogDao.read(blogId)).thenThrow(new NoResultException());
+        when(this.blogDao.read(blogId)).thenThrow(new NoResultException());
         // doThrow variant can be used for methods which return void to throw an exception -> this case does not fit
         // when() method can be used to throw an exception.
             this.blogService.removeBlogByID(blogId);
