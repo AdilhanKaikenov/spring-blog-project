@@ -57,7 +57,7 @@ public class CommentController {
         }
 
         BlogComment blogComment = getBlogCommentFromModel(blogCommentModel, blogId);
-        blogCommentService.submitComment(blogComment);
+        this.blogCommentService.submitComment(blogComment);
 
         return redirectView;
     }
@@ -69,7 +69,7 @@ public class CommentController {
         blogComment.setBlog(blog);
 
         User user = new User();
-        user.setId(userService.getCurrentUser().getId());
+        user.setId(this.userService.getCurrentUser().getId());
         blogComment.setUser(user);
 
         blogComment.setText(blogCommentModel.getText());
