@@ -7,7 +7,6 @@ import com.epam.adok.core.entity.Role;
 import com.epam.adok.core.entity.User;
 import com.epam.adok.core.entity.comment.BlogComment;
 import com.epam.adok.core.exception.BlogNotFoundException;
-import com.epam.adok.core.exception.DateParsingException;
 import com.epam.adok.core.service.BlogService;
 import com.epam.adok.core.service.CategoryService;
 import com.epam.adok.core.service.CommentService;
@@ -55,7 +54,7 @@ public class BlogController {
     @RequestMapping(value = "/blog", method = RequestMethod.GET)
     public ModelAndView blogs(ModelAndView modelAndView) {
 
-        List<Blog> blogs = blogService.findAllBlogs();
+        List<Blog> blogs = this.blogService.findAllBlogs();
 
         modelAndView.addObject("blogs", blogs);
         modelAndView.addObject("blogFilterModel", new BlogFilterModel());
@@ -68,9 +67,9 @@ public class BlogController {
     public ModelAndView blog(@PathVariable("id") long id,
                              Model model) {
 
-        Blog blog = blogService.findBlogByID(id);
+        Blog blog = this.blogService.findBlogByID(id);
 
-        List<BlogComment> allBlogComments = blogCommentService.findAllBlogCommentByBlogId(id);
+        List<BlogComment> allBlogComments = this.blogCommentService.findAllBlogCommentByBlogId(id);
 
         if (blog == null) {
             throw new NotFoundException();
@@ -99,10 +98,10 @@ public class BlogController {
 
     @RequestMapping(value = "/blog/filter", method = RequestMethod.POST)
     public ModelAndView filter(@ModelAttribute("blogFilterModel") BlogFilterModel blogFilterModel,
-                               ModelAndView modelAndView) throws DateParsingException {
+                               ModelAndView modelAndView) {
 
         BlogFilter blogFilter = getBlogFilterFromModel(blogFilterModel);
-        List<Blog> blogs = blogService.findAllBlogsByParameters(blogFilter);
+        List<Blog> blogs = this.blogService.findAllBlogsByParameters(blogFilter);
         modelAndView.addObject("blogs", blogs);
 
         modelAndView.setViewName("blogs");
@@ -129,7 +128,7 @@ public class BlogController {
         }
 
         Blog blog = getBlogFromModel(blogModel);
-        blogService.createBlog(blog);
+        this.blogService.createBlog(blog);
 
         modelAndView.setViewName("redirect:/blog");
 
@@ -138,9 +137,9 @@ public class BlogController {
 
     @RequestMapping(value = "/blog/{id}/delete", method = RequestMethod.GET)
     public ModelAndView delete(@PathVariable("id") String sourceId,
-                               ModelAndView modelAndView) throws BlogNotFoundException, javassist.NotFoundException {
+                               ModelAndView modelAndView) throws BlogNotFoundException {
 
-        User currentUser = userService.getCurrentUser();
+        User currentUser = this.userService.getCurrentUser();
 
         if (currentUser != null) {
 
@@ -156,7 +155,7 @@ public class BlogController {
         }
 
         long id = Long.parseLong(sourceId);
-        blogService.removeBlogByID(id);
+        this.blogService.removeBlogByID(id);
 
         modelAndView.setViewName("redirect:/blog");
 
@@ -169,7 +168,7 @@ public class BlogController {
 
         long id = Long.parseLong(sourceId);
 
-        Blog blog = blogService.findBlogByID(id);
+        Blog blog = this.blogService.findBlogByID(id);
         BlogModel blogModel = getBlogModelFromBlog(blog);
 
         modelAndView.addObject("blogModelEdit", blogModel);
@@ -190,7 +189,7 @@ public class BlogController {
         }
 
         Blog blog = getBlogFromModel(blogModel);
-        blogService.updateBlog(blog);
+        this.blogService.updateBlog(blog);
 
         modelAndView.setViewName("redirect:/blog/" + blog.getId());
 
@@ -199,7 +198,7 @@ public class BlogController {
 
     @ModelAttribute("categoryList")
     public List<Category> getCategoryList() {
-        return categoryService.findAllCategories();
+        return this.categoryService.findAllCategories();
     }
 
     @ExceptionHandler({NoResultException.class, NotFoundException.class})
@@ -220,7 +219,7 @@ public class BlogController {
     private List<Category> getCategoriesByIds(List<Long> categoryIds) {
         List<Category> allCategoriesByIdList = null;
         if (!categoryIds.isEmpty()) {
-            allCategoriesByIdList = categoryService.findAllCategoriesByIdList(categoryIds);
+            allCategoriesByIdList = this.categoryService.findAllCategoriesByIdList(categoryIds);
         }
         return allCategoriesByIdList;
     }
@@ -248,7 +247,6 @@ public class BlogController {
         return blogFilter;
     }
 
-
     private Blog getBlogFromModel(BlogModel blogModel) {
         Blog blog = new Blog();
         blog.setId(blogModel.getId());
@@ -256,7 +254,7 @@ public class BlogController {
         blog.setCategories(new HashSet<>(categories));
 
         User user = new User();
-        user.setId(userService.getCurrentUser().getId());
+        user.setId(this.userService.getCurrentUser().getId());
         blog.setAuthor(user);
 
         blog.setTitle(blogModel.getTitle());
