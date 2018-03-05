@@ -25,9 +25,9 @@ public class BlogQueryBuilder {
     }
 
     public JPAQuery createJPAQuery() {
-        final JPAQuery query = new JPAQuery(entityManager);
+        final JPAQuery query = new JPAQuery(this.entityManager);
         query.from(blog);
-        BooleanExpression predicate = handleFilterParameters(filter);
+        BooleanExpression predicate = handleFilterParameters(this.filter);
         return query.where(predicate);
     }
 

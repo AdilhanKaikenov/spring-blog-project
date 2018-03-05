@@ -27,15 +27,15 @@ public class BlogService {
     private CommentService<BlogComment> blogCommentService;
 
     public void createBlog(Blog blog) {
-        blogDao.save(blog);
+        this.blogDao.save(blog);
     }
 
     public Blog findBlogByID(long id) {
-        return blogDao.read(id);
+        return this.blogDao.read(id);
     }
 
     public List<Blog> findAllBlogs() {
-        return blogDao.readAll();
+        return this.blogDao.readAll();
     }
 
     /**
@@ -57,7 +57,7 @@ public class BlogService {
 
     private Blog getBlog(long id) throws BlogNotFoundException {
         try {
-            return blogDao.read(id);
+            return this.blogDao.read(id);
         } catch (NoResultException e) {
             log.info("Message from BlogService class : {}", id);
             throw new BlogNotFoundException("Blog with ID " + id + " was not found.", e);
@@ -65,14 +65,14 @@ public class BlogService {
     }
 
     public void updateBlog(Blog blog) {
-        blogDao.update(blog);
+        this.blogDao.update(blog);
     }
 
     public List<Blog> findAllBlogsByParameters(BlogFilter filter) {
-        return blogDao.readByParameters(filter);
+        return this.blogDao.readByParameters(filter);
     }
 
     public Blog findBlogByTitle(String title) {
-        return blogDao.readByTitle(title);
+        return this.blogDao.readByTitle(title);
     }
 }

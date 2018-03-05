@@ -20,7 +20,7 @@ public class BlogFilter {
     }
 
     public List<Category> getCategories() {
-        return categories;
+        return this.categories;
     }
 
     public void setCategories(List<Category> categories) {
@@ -28,7 +28,7 @@ public class BlogFilter {
     }
 
     public DateRange getDateRange() {
-        return dateRange;
+        return this.dateRange;
     }
 
     public void setDateRange(DateRange dateRange) {

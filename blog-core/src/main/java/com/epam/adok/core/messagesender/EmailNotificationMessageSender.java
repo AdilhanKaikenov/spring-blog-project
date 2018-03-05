@@ -33,7 +33,7 @@ public class EmailNotificationMessageSender {
             Thread.sleep(10000);
             log.info("10 seconds are over");
 
-            Notification notification = notificationService.readNotificationByID(notificationID);
+            Notification notification = this.notificationService.readNotificationByID(notificationID);
 
             User commentAuthor = notification.getUser();
             Blog blog = notification.getBlog();
@@ -48,7 +48,7 @@ public class EmailNotificationMessageSender {
             SimpleMailMessage mailMessage = buildMailMessage(
                     "uvedomitel.blogov@bk.ru", blogAuthorEmail, "Notification", message);
 
-            mailSender.send(mailMessage);
+            this.mailSender.send(mailMessage);
 
         } catch (InterruptedException e) {
             e.printStackTrace(); // TODO

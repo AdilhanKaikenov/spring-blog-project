@@ -14,14 +14,14 @@ public class CategoryService {
     private CategoryDao categoryDao;
 
     public Category findCategoryByID(long id) {
-        return categoryDao.read(id);
+        return this.categoryDao.read(id);
     }
 
     public List<Category> findAllCategories() {
-        return categoryDao.readAll();
+        return this.categoryDao.readAll();
     }
 
     public List<Category> findAllCategoriesByIdList(List<Long> ids) {
-        return categoryDao.readByIdList(ids);
+        return this.categoryDao.readByIdList(ids);
     }
 }

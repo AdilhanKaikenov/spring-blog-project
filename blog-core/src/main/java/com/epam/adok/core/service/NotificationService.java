@@ -14,10 +14,10 @@ public class NotificationService {
     private NotificationDao notificationDao;
 
     public Notification readNotificationByID(long id) {
-        return notificationDao.read(id);
+        return this.notificationDao.read(id);
     }
 
     public void deleteAllNotificationsByCreatedOnBefore(Date expiryDate) {
-        notificationDao.deleteByCreatedOnBefore(expiryDate);
+        this.notificationDao.deleteByCreatedOnBefore(expiryDate);
     }
 }

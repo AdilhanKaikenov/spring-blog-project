@@ -32,6 +32,6 @@ public class NotificationsAutoCleanerTimer {
         cal.add(Calendar.WEEK_OF_MONTH, -numberOfWeeks);
         Date expiryDate = cal.getTime();
 
-        notificationService.deleteAllNotificationsByCreatedOnBefore(expiryDate);
+        this.notificationService.deleteAllNotificationsByCreatedOnBefore(expiryDate);
     }
 }

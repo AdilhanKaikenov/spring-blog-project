@@ -20,11 +20,11 @@ public class UserService {
     private UserDao userDao;
 
     public User getUserByAuth(String login, String password) {
-        return userDao.findByAuth(login, password);
+        return this.userDao.findByAuth(login, password);
     }
 
     public User getUserByLogin(String login) {
-        return userDao.findByLogin(login);
+        return this.userDao.findByLogin(login);
     }
 
     public User getCurrentUser() {
@@ -38,7 +38,7 @@ public class UserService {
         log.info("Principal ---------- > {}", obj);
 
         if (obj instanceof UserPrincipal) {
-            return userDao.findByLogin(((UserPrincipal) obj).getUsername());
+            return this.userDao.findByLogin(((UserPrincipal) obj).getUsername());
         } else {
             return null; // anonymous user
         }

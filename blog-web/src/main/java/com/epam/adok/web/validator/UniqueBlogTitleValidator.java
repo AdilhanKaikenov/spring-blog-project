@@ -19,6 +19,6 @@ public class UniqueBlogTitleValidator implements ConstraintValidator<UniqueBlogT
 
     @Override
     public boolean isValid(String title, ConstraintValidatorContext context) {
-        return blogService.findBlogByTitle(title) == null;
+        return this.blogService.findBlogByTitle(title) == null;
     }
 }

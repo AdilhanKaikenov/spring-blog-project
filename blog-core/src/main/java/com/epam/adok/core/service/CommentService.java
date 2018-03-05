@@ -41,35 +41,35 @@ public class CommentService<T extends AbstractComment> {
     private EmailNotificationMessageSender messageSender;
 
     public T findCommentByID(long id) {
-        return commentDao.read(id);
+        return this.commentDao.read(id);
     }
 
     @Transactional
     public void submitComment(T comment) {
         log.info("Entering submitComment() method.");
-        commentDao.save(comment);
+        this.commentDao.save(comment);
         if (comment instanceof BlogComment) {
             Notification notification = createNotification((BlogComment) comment);
-            notificationDao.save(notification);
+            this.notificationDao.save(notification);
             long notificationId = notification.getId();
             log.info("Notification saved. ID - {} : ", notificationId);
-            messageSender.sendNotificationEmailMessage(notificationId);
+            this.messageSender.sendNotificationEmailMessage(notificationId);
             log.info("End of submitComment() method.");
         }
     }
 
     public List<BlogComment> findAllBlogCommentByBlogId(long blogID) {
-        return commentDao.readAllByBlogId(blogID);
+        return this.commentDao.readAllByBlogId(blogID);
     }
 
     public long removeAllBlogCommentsByBlogId(long blogId) {
         long result = this.countAllBlogCommentByBlogId(blogId);
-        commentDao.removeAllByBlogId(blogId);
+        this.commentDao.removeAllByBlogId(blogId);
         return result;
     }
 
     public long countAllBlogCommentByBlogId(long blogID) {
-        return commentDao.countAllByBlogId(blogID);
+        return this.commentDao.countAllByBlogId(blogID);
     }
 
     public List<CommentBranch> buildAllCommentBranchesByBlogId(long blogId) {

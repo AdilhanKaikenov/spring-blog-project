@@ -18,29 +18,31 @@ public abstract class GenericDao<T extends AbstractBaseEntity> implements Dao<T>
     private EntityManager entityManager;
 
     public JPAQuery getJpaQuery() {
-        return new JPAQuery(entityManager);
+        return new JPAQuery(this.entityManager);
     }
 
     public EntityManager getEntityManager() {
-        return entityManager;
+        return this.entityManager;
     }
 
     @Transactional
     @Override
     public void save(T t) {
-        entityManager.persist(t);
+        this.entityManager.persist(t);
     }
 
     @Transactional
     @Override
     public void update(T t) {
-        entityManager.merge(t);
+        this.entityManager.merge(t);
     }
 
     @Transactional
     @Override
     public void delete(T t) {
-        entityManager.remove(entityManager.contains(t) ? t : entityManager.merge(t));
+        this.entityManager.remove(
+                this.entityManager.contains(t) ? t : this.entityManager.merge(t)
+        );
     }
 
     @Override
