@@ -94,7 +94,7 @@ public class CommentService<T extends AbstractComment> {
 
     protected static class BlogCommentsStructureBuilder {
 
-        protected static List<CommentBranch> buildCommentBranchTree(Multimap<Long, BlogComment> map, Long parentId) {
+        protected static List<CommentBranch> buildCommentBranchTree(Multimap<Long, BlogComment> map, long parentId) {
             List<CommentBranch> commentsBranches = new ArrayList<>();
 
             Collection<BlogComment> blogComments = map.get(parentId);
