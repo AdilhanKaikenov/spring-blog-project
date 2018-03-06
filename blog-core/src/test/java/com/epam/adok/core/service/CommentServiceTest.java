@@ -2,9 +2,11 @@ package com.epam.adok.core.service;
 
 import com.epam.adok.core.commentshierarchy.CommentBranch;
 import com.epam.adok.core.configuration.TestApplicationContextConfiguration;
+import com.epam.adok.core.dao.CommentDao;
 import com.epam.adok.core.entity.Blog;
 import com.epam.adok.core.entity.User;
 import com.epam.adok.core.entity.comment.BlogComment;
+import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.ninja_squad.dbsetup.DbSetup;
 import com.ninja_squad.dbsetup.destination.DataSourceDestination;
@@ -36,6 +38,9 @@ public class CommentServiceTest {
     @Autowired
     private DataSource dataSource;
 
+    @Autowired
+    private CommentDao<BlogComment> commentDao;
+
     @Before
     public void prepareTestData() {
         Operation operation = sequenceOf(
@@ -47,13 +52,13 @@ public class CommentServiceTest {
                         .build(),
                 insertInto("comment")
                         .columns("id", "blog_id", "parent_comment_id", "user_id", "text", "comment_date", "comment_type")
-                        .values(1L, 1L, null, 1L, "Comment text-Comment text-Comment text-Comment text", new Date(), "BT")
-                        .values(2L, 1L, 1L, 2L, "Comment text-Comment text-Comment text-Comment text", new Date(), "BT")
-                        .values(3L, 1L, 1L, 2L, "Comment text-Comment text-Comment text-Comment text", new Date(), "BT")
-                        .values(4L, 1L, 3L, 1L, "Comment text-Comment text-Comment text-Comment text", new Date(), "BT")
-                        .values(5L, 1L, 1L, 2L, "Comment text-Comment text-Comment text-Comment text", new Date(), "BT")
-                        .values(6L, 1L, 5L, 1L, "Comment text-Comment text-Comment text-Comment text", new Date(), "BT")
-                        .values(7L, 1L, 5L, 1L, "Comment text-Comment text-Comment text-Comment text", new Date(), "BT")
+                        .values(1L, 1L, null, 1L, "BlogComment Text id = 1", new Date(), "BT")
+                        .values(2L, 1L, 1L, 2L, "BlogComment Text id = 2", new Date(), "BT")
+                        .values(3L, 1L, 1L, 2L, "BlogComment Text id = 3", new Date(), "BT")
+                        .values(4L, 1L, 3L, 1L, "BlogComment Text id = 4", new Date(), "BT")
+                        .values(5L, 1L, 1L, 2L, "BlogComment Text id = 5", new Date(), "BT")
+                        .values(6L, 1L, 5L, 1L, "BlogComment Text id = 6", new Date(), "BT")
+                        .values(7L, 1L, 5L, 1L, "BlogComment Text id = 7", new Date(), "BT")
                         .build()
         );
         DbSetup dbSetup = new DbSetup(new DataSourceDestination(this.dataSource), operation);
@@ -61,7 +66,7 @@ public class CommentServiceTest {
     }
 
     @Test
-    public void findAllCommentsByBlogID_checkThatTheNumberOfCommentsMatches_shouldCorrespondToReality() {
+    public void findAllCommentsByBlogID_ExistingBlogWithSeveralComments_ShouldReturnAllCommentsOfSpecificBlog() {
         // When
         List<BlogComment> allBlogCommentByBlogId = this.commentService.findAllBlogCommentByBlogId(1L);
         int numberOfComments = allBlogCommentByBlogId.size();
@@ -71,7 +76,7 @@ public class CommentServiceTest {
     }
 
     @Test
-    public void buildAllCommentBranchesByBlogId_countNumberOfSubBranchesForEachBranch_shouldCorrespondToReality() {
+    public void buildAllCommentBranchesByBlogId_ExistingBlogWithSeveralLevelsOfNestingCommentBranches_ShouldReturnCommentsTree() {
         // When
         List<CommentBranch> commentBranches = this.commentService.buildAllCommentBranchesByBlogId(1L);
 
@@ -94,10 +99,15 @@ public class CommentServiceTest {
     }
 
     @Test
-    public void buildCommentBranchTree_forSubCommentBranchWithoutSubComments_shouldReturnEmptySubCommentsList() {
+    public void buildCommentBranchTree_BranchOfRootCommentWithoutAnySubBranches_ShouldReturnEmptySubCommentsList() {
         // Given
-        List<BlogComment> blogComments = this.commentService.findAllBlogCommentByBlogId(1L);
-        Multimap<Long, BlogComment> map = CommentService.BlogCommentsStructureBuilder.getCommentsAsHierarchyMap(blogComments);
+        BlogComment rootBlogComment = this.generateBlogCommentInstance(1L, 0, 1L);
+        BlogComment subBlogComment = this.generateBlogCommentInstance(2L, 1L, 2L);
+
+        Multimap<Long, BlogComment> map = HashMultimap.create();
+
+        map.put(rootBlogComment.getParentComment().getId(), rootBlogComment);
+        map.put(subBlogComment.getParentComment().getId(), subBlogComment);
 
         // When
         List<CommentBranch> commentBranches = CommentService.BlogCommentsStructureBuilder.buildCommentBranchTree(map, 2L);
@@ -107,7 +117,7 @@ public class CommentServiceTest {
     }
 
     @Test
-    public void buildAllCommentBranchesByBlogId_forBlogWithoutComments_shouldReturnEmptyCommentBranchesList() {
+    public void buildAllCommentBranchesByBlogId_ExistingBlogWithoutComments_ShouldReturnEmptyCommentBranchesList() {
         // When
         List<CommentBranch> commentBranches = this.commentService.buildAllCommentBranchesByBlogId(4L);
 
@@ -116,26 +126,21 @@ public class CommentServiceTest {
     }
 
     @Test
-    public void buildAllCommentBranchesByBlogId_beforeAndAfterAddingAnAnswerForRootComment_numberOfSubBranchesShouldBeIncreased() {
+    public void buildAllCommentBranchesByBlogId_BlogCommentsBranchesWithSeveralSubBranches_ShouldSubmitNewComment() {
 
-        // Given - Before
-        List<CommentBranch> commentBranchesBefore = this.commentService.buildAllCommentBranchesByBlogId(1L);
-        CommentBranch targetCommentBranchBefore = commentBranchesBefore.get(0);
-
+        // Given - before
+        List<BlogComment> blogCommentsBefore = this.commentDao.readAllByBlogId(1L);
         BlogComment newComment = this.generateBlogCommentInstance(1L, 1L, 2L);
-
-        // Before
-        assertThat(targetCommentBranchBefore.getSubComments().size(), is(3));
 
         // When
         this.commentService.submitComment(newComment);
 
-        // Given - After sent new comment
-        List<CommentBranch> commentBranchesAfter = this.commentService.buildAllCommentBranchesByBlogId(1L);
-        CommentBranch targetCommentBranchAfter = commentBranchesAfter.get(0);
+        // Given - after
+        List<BlogComment> blogCommentsAfter = this.commentDao.readAllByBlogId(1L);
 
         // Then
-        assertThat(targetCommentBranchAfter.getSubComments().size(), is(4));
+        assertThat(blogCommentsBefore.size(), is(7));
+        assertThat(blogCommentsAfter.size(), is(8));
     }
 
     private BlogComment generateBlogCommentInstance(long blogId, long parentCommentId, long commentUserId) {
