@@ -1,6 +1,7 @@
 package com.epam.adok.core.service;
 
 import com.epam.adok.core.commentshierarchy.CommentBranch;
+import com.epam.adok.core.comparator.SorterByBlogCommentDate;
 import com.epam.adok.core.dao.CommentDao;
 import com.epam.adok.core.dao.NotificationDao;
 import com.epam.adok.core.entity.Blog;
@@ -69,7 +70,7 @@ public class CommentService<T extends AbstractComment> {
     }
 
     public long countAllBlogCommentByBlogId(long blogID) {
-        return this.commentDao.countAllByBlogId(blogID);
+        return commentDao.countAllByBlogId(blogID);
     }
 
     public List<CommentBranch> buildAllCommentBranchesByBlogId(long blogId) {
@@ -79,6 +80,24 @@ public class CommentService<T extends AbstractComment> {
         Multimap<Long, BlogComment> commentsHierarchyMap = getCommentsAsHierarchyMap(blogComments);
 
         return buildCommentBranchTree(commentsHierarchyMap, 0L); // zero is the mark for root comments with parentId = null
+    }
+
+    public String printCommentsTree(List<CommentBranch> branches, StringBuilder sb) {
+        return printCommentsTree(0, branches, sb);
+    }
+
+    public String printCommentsTree(int level, List<CommentBranch> branches, StringBuilder sb) {
+        for (CommentBranch branch : branches) {
+                if (level > 0) {
+                    String format = String.format("%" + level * 4 + "s%s%n", "", branch.getRootBlogComment().getText());
+                    sb.append(format);
+                } else {
+                    sb.append(branch.getRootBlogComment().getText());
+                    sb.append("\n");
+                }
+                this.printCommentsTree(level + 1, branch.getSubComments(), sb);
+            }
+        return sb.toString();
     }
 
     private Notification createNotification(BlogComment comment) {
@@ -109,6 +128,7 @@ public class CommentService<T extends AbstractComment> {
                     commentsBranches.add(commentBranch);
                 }
             }
+            commentsBranches.sort(new SorterByBlogCommentDate());
             return commentsBranches;
         }
 
