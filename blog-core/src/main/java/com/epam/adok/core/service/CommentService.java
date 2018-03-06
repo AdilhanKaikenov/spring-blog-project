@@ -83,7 +83,7 @@ public class CommentService<T extends AbstractComment> {
     }
 
     public String printCommentsTree(List<CommentBranch> branches, StringBuilder sb) {
-        return printCommentsTree(0, branches, sb);
+        return this.printCommentsTree(0, branches, sb);
     }
 
     public String printCommentsTree(int level, List<CommentBranch> branches, StringBuilder sb) {
