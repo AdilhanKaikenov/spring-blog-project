@@ -20,6 +20,7 @@ Spring Project for practice.
 * JUnit & Mockito 
 * DBSetup
 * Guava (Multimap)
+* Flyway
 
 Приложение - Блог:
 ------------------
