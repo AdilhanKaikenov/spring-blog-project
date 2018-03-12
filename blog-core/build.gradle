@@ -1,6 +1,25 @@
 group 'com.epam.adok.spring'
 version '1.0-SNAPSHOT'
 
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'mysql:mysql-connector-java:5.1.34'
+        classpath 'org.flywaydb:flyway-gradle-plugin:3.1'
+    }
+}
+
+apply plugin: 'flyway'
+
+flyway {
+    url = 'jdbc:mysql://localhost:3306'
+    user = 'root'
+    password = 'admin'
+    schemas = ['blog_db']
+}
+
 sourceSets {
     generated {
         java {
