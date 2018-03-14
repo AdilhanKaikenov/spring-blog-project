@@ -44,7 +44,7 @@ public class BlogServiceUnitTest {
         blog.setTitle("Title");
 
         when(this.blogDao.read(blogId)).thenReturn(blog);
-        when(this.blogCommentService.countAllBlogCommentByBlogId(blogId)).thenReturn(0L);
+        when(this.blogCommentService.getCommentsNumberByBlogId(blogId)).thenReturn(0);
 
         // When
         long commentNumber = this.blogService.removeBlogByID(blogId);
