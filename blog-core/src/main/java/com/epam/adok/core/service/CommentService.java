@@ -33,8 +33,6 @@ public class CommentService<T extends AbstractComment> {
 
     private static final Logger log = LoggerFactory.getLogger(CommentService.class);
 
-    private static final int MAX_COMMENT_LINES_NUMBER = 20;
-
     @Autowired
     private CommentDao<T> commentDao;
 
