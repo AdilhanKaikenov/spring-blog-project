@@ -315,6 +315,18 @@ public class CommentServiceTest {
         assertThat(secondLevelSubComments2.get(0).getRootBlogComment().getId(), is(4L));
     }
 
+    @Test
+    public void buildLimitedCommentsBranchesUpToTripleNesting_BlogWithoutComments_ShouldReturnEmptyCommentBranchesList() {
+        // Given
+        GivenTestDataDistributor.prepareBlogWithTwoFilledRootCommentBranchesAndBlogWithoutComments(this.dataSource);
+
+        // When
+        List<CommentBranch> commentBranches = this.commentService.buildLimitedCommentsBranchesUpToTripleNesting(4L, 1, 10);
+
+        // Then
+        assertThat(commentBranches.size(), is(0));
+    }
+
     private Map<Integer, Integer> countBranchSubCommentsNumberForEachLevelOfNesting(List<CommentBranch> commentBranches) {
 
         Map<Integer, Integer> result = new HashMap<>();
