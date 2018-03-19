@@ -38,7 +38,7 @@ public class CommentServiceTest {
     @Test
     public void findAllCommentsByBlogID_ExistingBlogWithSeveralComments_ShouldReturnAllCommentsOfSpecificBlog() {
         // Given
-        GivenTestDataDistributor.prepareBlogWithTwoFilledRootCommentBranchesAndBlogWithoutComments(this.dataSource);
+        GivenTestDataPreparer.prepareBlogWithTwoFilledRootCommentBranchesAndBlogWithoutComments(this.dataSource);
 
         // When
         List<BlogComment> allBlogCommentByBlogId = this.commentService.findAllBlogCommentByBlogId(1L);
@@ -51,7 +51,7 @@ public class CommentServiceTest {
     @Test
     public void buildAllCommentBranchesByBlogId_ExistingBlogWithSeveralLevelsOfNestingCommentBranches_ShouldReturnCommentsTree() {
         // Given
-        GivenTestDataDistributor.prepareBlogWithTwoFilledRootCommentBranchesAndBlogWithoutComments(this.dataSource);
+        GivenTestDataPreparer.prepareBlogWithTwoFilledRootCommentBranchesAndBlogWithoutComments(this.dataSource);
 
         // When
         List<CommentBranch> commentBranches = this.commentService.buildAllCommentBranchesByBlogId(1L);
@@ -100,7 +100,7 @@ public class CommentServiceTest {
     @Test
     public void buildAllCommentBranchesByBlogId_ExistingBlogWithoutComments_ShouldReturnEmptyCommentBranchesList() {
         // Given
-        GivenTestDataDistributor.prepareBlogWithTwoFilledRootCommentBranchesAndBlogWithoutComments(this.dataSource);
+        GivenTestDataPreparer.prepareBlogWithTwoFilledRootCommentBranchesAndBlogWithoutComments(this.dataSource);
 
         // When
         List<CommentBranch> commentBranches = this.commentService.buildAllCommentBranchesByBlogId(4L);
@@ -113,7 +113,7 @@ public class CommentServiceTest {
     public void buildAllCommentBranchesByBlogId_BlogCommentsBranchesWithSeveralSubBranches_ShouldSubmitNewComment() {
 
         // Given - before
-        GivenTestDataDistributor.prepareBlogWithTwoFilledRootCommentBranchesAndBlogWithoutComments(this.dataSource);
+        GivenTestDataPreparer.prepareBlogWithTwoFilledRootCommentBranchesAndBlogWithoutComments(this.dataSource);
 
         List<BlogComment> blogCommentsBefore = this.commentDao.readAllByBlogId(1L);
         BlogComment newComment = this.generateBlogCommentInstance(1L, 1L, 2L);
@@ -133,7 +133,7 @@ public class CommentServiceTest {
     @Test
     public void buildLimitedCommentsBranchesUpToTripleNesting_TwoRootBranchesWithFourLevelsOfNesting_ShouldReturnTripleNestingCommentsTreeWithTheSpecifiedNumberOfComments() {
         // Given
-        GivenTestDataDistributor.prepareBlogWithTwoFilledRootCommentBranchesAndBlogWithoutComments(this.dataSource);
+        GivenTestDataPreparer.prepareBlogWithTwoFilledRootCommentBranchesAndBlogWithoutComments(this.dataSource);
 
         // When
         List<CommentBranch> tripleNestingCommentsBranches = this.commentService.buildLimitedCommentsBranchesUpToTripleNesting(1L, 1, 20);
@@ -218,7 +218,7 @@ public class CommentServiceTest {
     @Test(expected = IllegalArgumentException.class)
     public void buildLimitedCommentsBranchesUpToTripleNesting_TwoRootBranchesWithFourLevelsOfNestingAndLinePerPageEqualZero_ShouldThrowException() {
         // Given
-        GivenTestDataDistributor.prepareBlogWithTwoFilledRootCommentBranchesAndBlogWithoutComments(this.dataSource);
+        GivenTestDataPreparer.prepareBlogWithTwoFilledRootCommentBranchesAndBlogWithoutComments(this.dataSource);
         //When
         this.commentService.buildLimitedCommentsBranchesUpToTripleNesting(1L, 1, 0);
     }
@@ -226,7 +226,7 @@ public class CommentServiceTest {
     @Test(expected = IllegalArgumentException.class)
     public void buildLimitedCommentsBranchesUpToTripleNesting_TwoRootBranchesWithFourLevelsOfNestingAndPageEqualZero_ShouldThrowException() {
         // Given
-        GivenTestDataDistributor.prepareBlogWithTwoFilledRootCommentBranchesAndBlogWithoutComments(this.dataSource);
+        GivenTestDataPreparer.prepareBlogWithTwoFilledRootCommentBranchesAndBlogWithoutComments(this.dataSource);
         // When
         this.commentService.buildLimitedCommentsBranchesUpToTripleNesting(1L, 0, 10);
     }
@@ -234,7 +234,7 @@ public class CommentServiceTest {
     @Test(expected = IllegalArgumentException.class)
     public void buildLimitedCommentsBranchesUpToTripleNesting_BlogIdentifierEqualZero_ShouldThrowException() {
         // Given
-        GivenTestDataDistributor.prepareBlogWithTwoFilledRootCommentBranchesAndBlogWithoutComments(this.dataSource);
+        GivenTestDataPreparer.prepareBlogWithTwoFilledRootCommentBranchesAndBlogWithoutComments(this.dataSource);
         // When
         this.commentService.buildLimitedCommentsBranchesUpToTripleNesting(0L, 1, 10);
     }
@@ -242,7 +242,7 @@ public class CommentServiceTest {
     @Test
     public void buildLimitedCommentsBranchesUpToTripleNesting_NonExistentBlog_ShouldReturnEmptyCommentBranchesList() {
         // Given
-        GivenTestDataDistributor.prepareBlogWithTwoFilledRootCommentBranchesAndBlogWithoutComments(this.dataSource);
+        GivenTestDataPreparer.prepareBlogWithTwoFilledRootCommentBranchesAndBlogWithoutComments(this.dataSource);
 
         // When
         List<CommentBranch> commentBranches = this.commentService.buildLimitedCommentsBranchesUpToTripleNesting(1000L, 1, 10);
@@ -254,7 +254,7 @@ public class CommentServiceTest {
     @Test
     public void buildLimitedCommentsBranchesUpToTripleNesting_BlogWithRootCommentBranchUpToOneLevelOfNesting_ShouldReturnSingleNestingCommentsTreeEqualOrLessTheSpecifiedNumberOfComments() {
         // Given
-        GivenTestDataDistributor.prepareBlogWithRootCommentBranchUpToOneLevelOfNesting(this.dataSource);
+        GivenTestDataPreparer.prepareBlogWithRootCommentBranchUpToOneLevelOfNesting(this.dataSource);
 
         // When
         List<CommentBranch> commentBranches = this.commentService.buildLimitedCommentsBranchesUpToTripleNesting(1L, 1, 10);
@@ -281,7 +281,7 @@ public class CommentServiceTest {
     @Test
     public void buildLimitedCommentsBranchesUpToTripleNesting_BlogWithRootCommentBranchUpToOneDoubleNesting_ShouldReturnDoubleNestingCommentsTreeEqualOrLessTheSpecifiedNumberOfComments() {
         // Given
-        GivenTestDataDistributor.prepareBlogWithRootCommentBranchUpToOneDoubleNesting(this.dataSource);
+        GivenTestDataPreparer.prepareBlogWithRootCommentBranchUpToOneDoubleNesting(this.dataSource);
 
         // When
         List<CommentBranch> commentBranches = this.commentService.buildLimitedCommentsBranchesUpToTripleNesting(1L, 1, 10);
@@ -318,7 +318,7 @@ public class CommentServiceTest {
     @Test
     public void buildLimitedCommentsBranchesUpToTripleNesting_BlogWithoutComments_ShouldReturnEmptyCommentBranchesList() {
         // Given
-        GivenTestDataDistributor.prepareBlogWithTwoFilledRootCommentBranchesAndBlogWithoutComments(this.dataSource);
+        GivenTestDataPreparer.prepareBlogWithTwoFilledRootCommentBranchesAndBlogWithoutComments(this.dataSource);
 
         // When
         List<CommentBranch> commentBranches = this.commentService.buildLimitedCommentsBranchesUpToTripleNesting(4L, 1, 10);

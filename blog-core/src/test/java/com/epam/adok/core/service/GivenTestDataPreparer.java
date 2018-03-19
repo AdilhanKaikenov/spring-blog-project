@@ -8,7 +8,7 @@ import javax.sql.DataSource;
 
 import static com.ninja_squad.dbsetup.Operations.*;
 
-public class GivenTestDataDistributor {
+public class GivenTestDataPreparer {
 
     public static void prepareBlogWithTwoFilledRootCommentBranchesAndBlogWithoutComments(DataSource dataSource) {
 
